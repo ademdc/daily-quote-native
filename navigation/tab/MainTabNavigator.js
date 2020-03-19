@@ -1,14 +1,23 @@
-import { createBottomTabNavigator } from 'react-navigation-tabs';
 import React from 'react';
 
-import QuoteScreen from '../../screens/QuoteScreen';
-import FavoritesScreen from '../../screens/FavoritesScreen';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+
+
+// import QuoteScreen from '../../screens/QuoteScreen';
+import QuoteStackNavigator from '../stack/QuoteStackNavigator';
+import FavoriteStackNavigator from '../stack/FavoriteStackNavigator';
+
+// import FavoritesScreen from '../../screens/FavoritesScreen';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../contants/colors';
 
+// const QuoteStackNavigator = createStackNavigator({
+// 	QuoteScreen: QuoteScreen
+// });
+
 const MainTabNavigator = createBottomTabNavigator({
 	QuoteScreen: {
-		screen: QuoteScreen,
+		screen: QuoteStackNavigator,
 		navigationOptions: {
 			tabBarLabel: 'Quote of day',
 			tabBarIcon: (tabInfo) => {
@@ -17,7 +26,7 @@ const MainTabNavigator = createBottomTabNavigator({
 		}
 	},
 	FavoritesScreen: {
-		screen: FavoritesScreen,
+		screen: FavoriteStackNavigator,
 		navigationOptions: {
 			tabBarLabel: 'Favorites',
 			tabBarIcon: (tabInfo) => {

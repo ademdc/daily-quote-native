@@ -2,7 +2,8 @@ import * as actions from '../actions/auth';
 
 const innitialState = {
 	token: null,
-	userId: null
+	userId: null,
+	pushToken: null
 }
 
 const authReducer = (state = innitialState, action) => {
@@ -14,6 +15,8 @@ const authReducer = (state = innitialState, action) => {
 				return { ...state, token: action.token, userId: action.userId }
 		case actions.LOGOUT:
 			return { innitialState }
+		case actions.SET_PUSH_TOKEN:
+			return { ...state, pushToken: action.pushToken }
 		default:
 			return state;
 	}

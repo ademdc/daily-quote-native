@@ -1,89 +1,100 @@
 import React, { useState, useEffect, Fragment, useRef, useCallback } from "react";
-import { StyleSheet, View, Text, Button, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity, ScrollView, ActivityIndicator, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import * as quoteActions from '../store/actions/quote';
+import * as authActions from '../store/actions/auth';
+
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import { Notifications } from 'expo';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import HeaderIcon from '../navigation/components/HeaderIcon';
 
 const QuoteScreen = (props) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
 	const allQuotes = useSelector(state => state.quote.quotes)
-	const quote = useSelector(state => state.quote.quote)
+  const quote = useSelector(state => state.quote.quote)
+  const token = useSelector(state => state.auth.token)
+  const pushToken = useSelector(state => state.auth.pushToken)
 	
-	const dispatch = useDispatch();
-
-	const randomQuotesHandler = (quotes) => {
-		dispatch(quoteActions.getRandomQuote(quotes));
-	}
-
-	const loadQuotes = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      await dispatch(quoteActions.getQuotes());
-    } catch (err) {
-      setError(err.message);
+  const dispatch = useDispatch();
+  
+  const registerForPushNotificationsAsync = useCallback(async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      if (token){
+        let newPushToken = await Notifications.getExpoPushTokenAsync();
+        console.log(newPushToken);
+        await dispatch(authActions.setPushToken(newPushToken))
+      }
+    } else {
+      alert('Must use physical device for Push Notifications');
     }
-    setIsLoading(false);
-  }, [dispatch, setIsLoading, setError]);
+  },[token, pushToken]);
 
-  const onSwipeLeft = (gestureState) => {
-    console.log('swiped left')
-    randomQuotesHandler(allQuotes)
-  }
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+  },[registerForPushNotificationsAsync]);
 
-	useEffect(() => {
-		loadQuotes();
-	}, [dispatch, loadQuotes])
+	const randomQuoteHandler = useCallback(() => {
+		dispatch(quoteActions.getRandomQuote());
+  }, [quote])
 
-	if (isLoading) {
+  useEffect(() => {
+    randomQuoteHandler()
+  }, []);
+  
+	if (!quote) {
 		return (
 			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 				<ActivityIndicator size='large' />
 			</View>
 			);
-	}
-
-	let imageContainer = null;
-	if (!isLoading && quote) {
-		imageContainer = (
-			<View style={styles.imageContainer}>
-				<Image 
-					style={styles.image} 
-					source={{uri: quote.image_url}}
-					resizeMode="cover" 
-				/>
-			</View>
-			);
-	}else {
-		imageContainer = 	( <ActivityIndicator size='large' />);
-	}
+	} 
 
   return (
     <View style={styles.quoteContainer}>
-				{imageContainer}
-        <Text style={styles.header}>{"Mašnica daily quote".toUpperCase()}</Text>
-        <View style={styles.logoImageContainer}>
-          <Image 
-            style={styles.image} 
-            source={require("../assets/images/logo.png")}
-            resizeMode="cover" 
-          />
-        </View>
-    <ScrollView horizontal={true} contentContainerStyle={styles.quoteContainer}>
-      {quote && (
-        <GestureRecognizer onSwipeLeft={onSwipeLeft}>
-          <Text style={styles.quoteText}>{quote.text}</Text>
-          <Text style={styles.quoteAuthor}>{quote.author}</Text>
-          
-        </GestureRecognizer>
-      )}
-      {/* <Button onPress={() => randomQuotesHandler(allQuotes)} syle={styles.button} title="Next quote" /> */}
+      <ImageBackground imageStyle= {{opacity:0.4}} style={styles.imageBg} source={{uri: quote.image_url}}>
 
-    </ScrollView>
-  </View>
+        <ScrollView horizontal={false} contentContainerStyle={styles.quoteContainer}>
+          {quote && (
+            <Fragment>
+              <Text style={styles.quoteText}>{quote.text}</Text>
+              <Text style={styles.quoteAuthor}>{quote.author}</Text>
+              
+            </Fragment>
+          )}
+          {/* <Button onPress={() => randomQuotesHandler(allQuotes)} syle={styles.button} title="Next quote" /> */}
+
+        </ScrollView>
+      </ImageBackground>
+    </View>
   )
+
 }
 
+QuoteScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Mašnica daily quote',
+    headerLeft: () => (
+      <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
+    )
+   }
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -108,9 +119,9 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     textAlign: "center",
-    fontSize: 24,
-    fontStyle: 'italic',
-    paddingHorizontal: 10
+    fontSize: 35,
+    fontStyle: 'normal',
+    paddingHorizontal: 20
   },
   quoteAuthor: {
     fontSize: 18,
@@ -136,7 +147,14 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 30
-  }
+  },
+  imageBg: {
+		height: '100%',
+		width: '100%',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+	},
 })
 
 export default QuoteScreen;

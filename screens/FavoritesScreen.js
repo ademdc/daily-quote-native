@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import * as quoteActions from '../store/actions/quote';
-
+import HeaderIcon from '../navigation/components/HeaderIcon';
 
 const favoriteQuote = (item) => {
 	return(
@@ -21,31 +21,44 @@ const FavoritesScreen = (props) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(quoteActions.getFavoriteQuotes());
+		if(token) {
+			dispatch(quoteActions.getFavoriteQuotes());
+		}
 	}, [token])
 
 	if (!token) {
 		return (
 			<View style={styles.container}>
-				<Text style={{...styles.title, fontStyle: 'italic'}} >Login to see your favorite quotes.</Text>
+				<Text style={styles.title} >Login to see your favorite quotes.</Text>
 				<Button title='Login' onPress={()=> props.navigation.navigate('AuthScreen')}></Button>
 			</View>
 		)
 	}
 	return (
 		<View style={styles.centered}>
-			<Text style={styles.title}>Favorites screen</Text>
 			<View style={styles.listContainer}>
-				<FlatList
+				{favoriteQuotes.lenght > 0 ? (<FlatList
 					keyExtractor={item => item.text}
 					data={favoriteQuotes}
 					renderItem={favoriteQuote}
-				/>
+				/>) : (
+					<Text style={style.title}>No favorite quotes added yet.</Text>
+				)}
+				
 			</View>
 
 		</View>
 	);
 }
+
+FavoritesScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Favorites',
+    headerLeft: () => (
+      <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
+    )
+   }
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -62,7 +75,7 @@ const styles = StyleSheet.create({
 		height: 400,
 	},
 	title: {
-		fontSize: 25,
+		fontSize: 20,
 		marginVertical: 40
 	},
 	favoriteQuoteContainer: {

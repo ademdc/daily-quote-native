@@ -42,8 +42,18 @@ export const getFavoriteQuotes = () => {
 	}
 }
 
-export const getRandomQuote = (quotes) => {
-	let randomIndex = Math.floor(Math.random() * quotes.length);
-	const newQuote = quotes[randomIndex]
-	return { type: GET_RANDOM_QUOTE, quote: newQuote}
+export const getRandomQuote = () => {
+	return dispatch => {
+		axios.get(URLs.testBase.concat('/quotes/random'))
+			.then(quote => {
+				return dispatch({
+					type: GET_RANDOM_QUOTE,
+					quote: quote.data
+				});
+			})
+			.catch(error => {
+				console.log(error)
+				return false;
+		});
+	}
 }

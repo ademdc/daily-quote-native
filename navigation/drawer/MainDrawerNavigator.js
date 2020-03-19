@@ -3,7 +3,6 @@ import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text } from 'react-na
 
 import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
 import MainTabNavigator from '../tab/MainTabNavigator';
-import AboutScreen from '../../screens/AboutScreen';
 import AuthScreen from '../../screens/AuthScreen';
 
 import Colors from '../../contants/colors';
@@ -12,7 +11,6 @@ import * as authActions from '../../store/actions/auth';
 
 let drawerItems = {
 	HomeScreen:  {screen: MainTabNavigator, navigationOptions: { drawerLabel: 'Home'}},
-	AboutScreen: {screen: AboutScreen, navigationOptions: { drawerLabel: 'About'}},
 	AuthScreen:  {screen: AuthScreen, navigationOptions: { drawerLabel: 'Authenticate'}}
 }
 
