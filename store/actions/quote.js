@@ -4,6 +4,7 @@ import axios from 'axios';
 export const GET_QUOTES = 'GET_QUOTES';
 export const GET_RANDOM_QUOTE = 'GET_RANDOM_QUOTE';
 export const GET_FAVORITE_QUOTES = 'GET_FAVORITE_QUOTES';
+export const SET_FAVORITE_QUOTE = 'SET_FAVORITE_QUOTE';
 
 
 export const getQuotes = () => {
@@ -30,6 +31,7 @@ export const getFavoriteQuotes = () => {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
 			.then(quotes => {
+				console.log(quotes.data)
 				return dispatch({
 					type: GET_FAVORITE_QUOTES,
 					favoriteQuotes: quotes.data
@@ -49,6 +51,29 @@ export const getRandomQuote = () => {
 				return dispatch({
 					type: GET_RANDOM_QUOTE,
 					quote: quote.data
+				});
+			})
+			.catch(error => {
+				console.log(error)
+				return false;
+		});
+	}
+}
+
+export const setFavoriteQuote = (quote) => {
+	return (dispatch, getState) => {
+		console.log("-----------> IN SET FAVORITE QUOTE ACTION <-----------")
+		axios.post(URLs.testBase.concat('/quotes/set_favorite'), {
+			user_id:  getState().auth.userId,
+			quote_id: quote.id
+		}, {
+			headers: {
+				Authorization: 'Bearer ' + getState().auth.token
+			}})
+			.then(quotes => {
+				return dispatch({
+					type: SET_FAVORITE_QUOTE,
+					favoriteQuote: quotes.data.favorite_quote
 				});
 			})
 			.catch(error => {

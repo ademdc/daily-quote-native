@@ -8,7 +8,7 @@ const HeaderIcon = (props) => {
   return(
     <View style={{...styles.iconContainer, ...props.style}}>
       <TouchableOpacity onPress={props.onPress}>
-        <Ionicons name={props.icon} size={25} color={Colors.blueMain}/>
+        <Ionicons name={props.icon} size={25} color={Colors.babyRose}/>
       </TouchableOpacity>
     </View>
   )

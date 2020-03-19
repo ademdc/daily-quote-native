@@ -12,6 +12,10 @@ import HeaderIcon from '../navigation/components/HeaderIcon';
 import { Ionicons } from '@expo/vector-icons';
 import { showMessage } from "react-native-flash-message";
 
+const isInFavorites = (allQuotes, quote) => {
+  return allQuotes.map(q => q.text).includes(quote.text)
+}
+
 const QuoteScreen = (props) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
@@ -19,7 +23,8 @@ const QuoteScreen = (props) => {
   const quote = useSelector(state => state.quote.quote)
   const token = useSelector(state => state.auth.token)
   const pushToken = useSelector(state => state.auth.pushToken)
-	
+  const favoriteQuotes = useSelector(state => state.quote.favoriteQuotes)
+
   const dispatch = useDispatch();
   
   const registerForPushNotificationsAsync = useCallback(async () => {
@@ -61,10 +66,24 @@ const QuoteScreen = (props) => {
   }, []);
 
   const setFavoriteQuoteHandler = () => {
-    showMessage({
-      message: "Quote was added to favorites",
-      type: "success",
-    })
+    if(isInFavorites(favoriteQuotes, quote)){
+      showMessage({
+        message: "Quote is already in favorites",
+        type: "info",
+      })
+      return
+    }
+
+    try {
+      dispatch(quoteActions.setFavoriteQuote(quote))
+      showMessage({
+        message: "Quote was added to favorites",
+        type: "success",
+      })
+    } catch(error) {
+      console.log(error)
+    }
+    
   }
   
 	if (!quote) {

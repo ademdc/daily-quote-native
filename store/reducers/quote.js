@@ -1,4 +1,4 @@
-import { GET_QUOTES, GET_RANDOM_QUOTE, GET_FAVORITE_QUOTES} from '../actions/quote';
+import { GET_QUOTES, GET_RANDOM_QUOTE, GET_FAVORITE_QUOTES, SET_FAVORITE_QUOTE } from '../actions/quote';
 import { ActionSheetIOS } from 'react-native';
 
 const innitialState = {
@@ -17,6 +17,8 @@ const quoteReducer = (state = innitialState, action) => {
 				return { ...state, quote: action.quote }
 			case GET_FAVORITE_QUOTES:
 				return { ...state, favoriteQuotes: action.favoriteQuotes }
+			case SET_FAVORITE_QUOTE:
+				return { ...state, favoriteQuotes: [...state.favoriteQuotes, action.favoriteQuote] }
 			default:
 				return state;
     }

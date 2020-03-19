@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import * as quoteActions from '../store/actions/quote';
 import HeaderIcon from '../navigation/components/HeaderIcon';
+import Colors from '../contants/colors';
 
 const favoriteQuote = (item) => {
 	return(
 		<TouchableOpacity>
 			<View style={styles.favoriteQuoteContainer}>
-				<Text>{item.item.text}</Text>
+				<View style={styles.favQuoteImageContainer}>
+					<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
+						<Text style={styles.author}>{item.item.author}</Text>
+						<View style={styles.quoteTextContainer}>
+							<Text style={styles.quoteText}>{item.item.text}</Text>
+						</View>			
+					</ImageBackground>
+				</View>		
+				
 			</View>
+			
 		</TouchableOpacity>
-
 	);
 }
 const FavoritesScreen = (props) => {
@@ -21,6 +30,7 @@ const FavoritesScreen = (props) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		console.log('-------> USE EFFECT OF FAVORITE SCREEN <------------')
 		if(token) {
 			dispatch(quoteActions.getFavoriteQuotes());
 		}
@@ -36,8 +46,8 @@ const FavoritesScreen = (props) => {
 	}
 	return (
 		<View style={styles.centered}>
-			{favoriteQuotes.lenght > 0 ? (<FlatList
-				keyExtractor={item => item.text}
+			{favoriteQuotes.length > 0 ? (<FlatList
+				keyExtractor={item => item.id}
 				data={favoriteQuotes}
 				renderItem={favoriteQuote}
 			/>) : (
@@ -71,9 +81,36 @@ const styles = StyleSheet.create({
 		fontFamily: 'ibm-plex-light'
 	},
 	favoriteQuoteContainer: {
-		padding: 20,
-		borderBottomColor: 'gray',
-		borderBottomWidth: 1
+		padding: 0,
+		borderBottomColor: Colors.babyRose,
+		borderBottomWidth: 3,
+		// backgroundColor: 'yellow',
+		// marginBottom: 10,
+	},
+	favQuoteImageContainer: {
+		height: 200,
+		width: '100%'
+	},
+	favQuoteImage: {
+		width: '100%',
+		height: '100%',
+		justifyContent: 'flex-end',
+	},
+	author: {
+		color: 'white',
+		width:100,
+		fontFamily: 'ibm-plex-thin',
+		fontSize: 20
+		// backgroundColor: 'white'
+	},
+	quoteTextContainer: {
+		backgroundColor: 'rgba(255,255,255,0.7)'
+	},
+	quoteText: {
+		fontFamily: 'ibm-plex-light',
+		fontSize: 17,
+		color: 'black',
+		padding: 5
 	}
 })
 
