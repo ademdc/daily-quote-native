@@ -1,24 +1,16 @@
 import React, { useState, useEffect, Fragment, useRef } from "react";
 import { StyleSheet, View, Text, Button, Image, ScrollView } from "react-native";
 import AppNavigator from './navigation/AppNavigator';
-// import QuoteScreen from './screens/QuoteScreen';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-
-import quoteReducer from './store/reducers/quote';
 import { Provider } from 'react-redux';
+import FlashMessage from "react-native-flash-message";
 
-
-const rootReducer = combineReducers({
-  quote: quoteReducer
-})
-
-const store = createStore(rootReducer, applyMiddleware(thunk));
+import store from './store/store';
 
 export default function App() {
   return (
     <Provider store={store}>
       <AppNavigator />
+      <FlashMessage position="top" />
     </Provider>
   );
 }
