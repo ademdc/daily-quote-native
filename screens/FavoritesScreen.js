@@ -28,7 +28,7 @@ const FavoritesScreen = (props) => {
 
 	if (!token) {
 		return (
-			<View style={styles.container}>
+			<View style={styles.centered}>
 				<Text style={styles.title} >Login to see your favorite quotes.</Text>
 				<Button title='Login' onPress={()=> props.navigation.navigate('AuthScreen')}></Button>
 			</View>
@@ -36,17 +36,13 @@ const FavoritesScreen = (props) => {
 	}
 	return (
 		<View style={styles.centered}>
-			<View style={styles.listContainer}>
-				{favoriteQuotes.lenght > 0 ? (<FlatList
-					keyExtractor={item => item.text}
-					data={favoriteQuotes}
-					renderItem={favoriteQuote}
-				/>) : (
-					<Text style={style.title}>No favorite quotes added yet.</Text>
-				)}
-				
-			</View>
-
+			{favoriteQuotes.lenght > 0 ? (<FlatList
+				keyExtractor={item => item.text}
+				data={favoriteQuotes}
+				renderItem={favoriteQuote}
+			/>) : (
+				<Text style={styles.title}>No favorite quotes added yet.</Text>
+			)}
 		</View>
 	);
 }
@@ -61,11 +57,6 @@ FavoritesScreen.navigationOptions = navData => {
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
 	centered: {
 		flex: 1,
 		justifyContent: 'center',
@@ -76,7 +67,8 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 20,
-		marginVertical: 40
+		marginVertical: 40,
+		fontFamily: 'ibm-plex-light'
 	},
 	favoriteQuoteContainer: {
 		padding: 20,

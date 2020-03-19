@@ -55,9 +55,9 @@ const MainDrawerNavigator = createDrawerNavigator(
 
 const styles = StyleSheet.create({
   drawerItem: {
-    fontSize: 15,
-    color: Colors.blueMain,
-    paddingLeft: 15,
+    fontSize: 14,
+    color: 'black',
+    paddingLeft: 17,
     fontWeight: 'bold',
     paddingTop: 30
   },

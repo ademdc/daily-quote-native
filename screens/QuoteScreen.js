@@ -9,6 +9,8 @@ import Constants from 'expo-constants';
 import { Notifications } from 'expo';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import HeaderIcon from '../navigation/components/HeaderIcon';
+import { Ionicons } from '@expo/vector-icons';
+import { showMessage } from "react-native-flash-message";
 
 const QuoteScreen = (props) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +59,13 @@ const QuoteScreen = (props) => {
   useEffect(() => {
     randomQuoteHandler()
   }, []);
+
+  const setFavoriteQuoteHandler = () => {
+    showMessage({
+      message: "Quote was added to favorites",
+      type: "success",
+    })
+  }
   
 	if (!quote) {
 		return (
@@ -67,24 +76,23 @@ const QuoteScreen = (props) => {
 	} 
 
   return (
-    <View style={styles.quoteContainer}>
+    <View style={styles.container}>
       <ImageBackground imageStyle= {{opacity:0.4}} style={styles.imageBg} source={{uri: quote.image_url}}>
-
         <ScrollView horizontal={false} contentContainerStyle={styles.quoteContainer}>
-          {quote && (
-            <Fragment>
-              <Text style={styles.quoteText}>{quote.text}</Text>
-              <Text style={styles.quoteAuthor}>{quote.author}</Text>
-              
-            </Fragment>
-          )}
+          <Fragment>
+            <Text style={styles.quoteText}>{quote.text}</Text>
+            <Text style={styles.quoteAuthor}>{quote.author}</Text> 
+          </Fragment>
           {/* <Button onPress={() => randomQuotesHandler(allQuotes)} syle={styles.button} title="Next quote" /> */}
-
+          
+          {token && (<TouchableOpacity style={styles.likeQuoteContainer} onPress={setFavoriteQuoteHandler}>
+            <Ionicons name='ios-heart' size={50} color='white'/>
+          </TouchableOpacity>)}
+          
         </ScrollView>
       </ImageBackground>
     </View>
   )
-
 }
 
 QuoteScreen.navigationOptions = navData => {
@@ -110,23 +118,18 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%'
   },
-  header: {
-    marginVertical: 10,
-    textAlign: 'center',
-    fontSize: 23,
-    fontWeight: 'bold',
-    marginTop: 40
-  },
   quoteText: {
     textAlign: "center",
     fontSize: 35,
     fontStyle: 'normal',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    fontFamily: 'ibm-plex-light'
   },
   quoteAuthor: {
     fontSize: 18,
     marginTop: 25,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'ibm-plex-thin'
   },
   logoImageContainer: {
 		width: 100,
@@ -134,27 +137,19 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		marginVertical: 20
 	},
-  imageContainer: {
-		width: '100%',
-		height: 200,
-		justifyContent: 'center',
-		alignItems: 'center',
-		overflow: 'hidden',
-	},
 	image: {
 		width: '100%',
 		height: '100%',
   },
-  button: {
-    marginVertical: 30
-  },
   imageBg: {
 		height: '100%',
 		width: '100%',
-    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
-	},
+  },
+  likeQuoteContainer: {
+    marginTop: 50
+  }
 })
 
 export default QuoteScreen;
