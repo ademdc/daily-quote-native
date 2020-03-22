@@ -6,15 +6,6 @@ import Colors from '../../contants/colors';
 import { Platform } from 'react-native';
 
 
-// const defaultStackNavOptions = {
-// 	defaultNavigationOptions: {
-// 		headerStyle: {
-// 			backgroundColor: Platform.OS === 'android' ? Colors.purpleMain : ''
-// 		},
-// 		headerTintColor: Platform.OS === 'android' ? 'white' : Colors.blueMain
-// 	}
-// }
-
 const FavoriteStackNavigator = createStackNavigator({
   FavoriteScreen: FavoriteScreen 
   },{

@@ -3,17 +3,27 @@ import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text } from 'react-na
 
 import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
 import MainTabNavigator from '../tab/MainTabNavigator';
-import AuthScreen from '../../screens/AuthScreen';
+import NullComponent from '../components/NullComponent';
+import AuthStackScreen from '../stack/AuthStackNavigator';
 
 import Colors from '../../contants/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import * as authActions from '../../store/actions/auth';
+import { Ionicons } from '@expo/vector-icons';
 
-let drawerItems = {
-	HomeScreen:  {screen: MainTabNavigator, navigationOptions: { drawerLabel: 'Home'}},
-	AuthScreen:  {screen: AuthScreen, navigationOptions: { drawerLabel: 'Authenticate'}}
+const homeText = () => {
+  return(<Text style={styles.drawerItem}><Ionicons name='ios-home' size={20}/> Home </Text>)
 }
 
+const loginText = (text) => {
+  return(<Text style={styles.drawerItem}><Ionicons name='ios-log-in' size={20}/> {text}</Text>)
+
+}
+
+let drawerItems = {
+  HomeScreen:  {screen: MainTabNavigator, navigationOptions: { drawerLabel: homeText}},
+  AuthScreen:  {screen: AuthStackScreen, navigationOptions: { drawerLabel: NullComponent}}
+}
 const MainDrawerNavigator = createDrawerNavigator(
 	drawerItems,
 	{
@@ -33,7 +43,7 @@ const MainDrawerNavigator = createDrawerNavigator(
                   props.navigation.toggleDrawer();
                   props.navigation.navigate('AuthScreen');
                 }}>
-                  <Text style={styles.drawerItem}>Logout</Text>
+                  {loginText('Log out')}
                 </TouchableOpacity>
               
               ): (
@@ -42,7 +52,7 @@ const MainDrawerNavigator = createDrawerNavigator(
                   props.navigation.toggleDrawer();
                   props.navigation.navigate('AuthScreen');
                 }}>
-                  <Text style={styles.drawerItem}>Login/Sign Up</Text>
+                  {loginText('Log in/Sign up')}
                 </TouchableOpacity>
               ) }
 						
@@ -59,7 +69,7 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingLeft: 17,
     fontWeight: 'bold',
-    paddingTop: 30
+    paddingVertical: 10
   },
   customItemsContainer: {
     flex: 1,

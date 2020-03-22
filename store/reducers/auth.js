@@ -9,10 +9,8 @@ const innitialState = {
 const authReducer = (state = innitialState, action) => {
 	console.log(action.type)
 	switch(action.type) {
-		case actions.LOGIN:
+		case actions.AUTHENTICATE:
 			return { ...state, token: action.token, userId: action.userId }
-		case actions.SIGN_UP:
-				return { ...state, token: action.token, userId: action.userId }
 		case actions.LOGOUT:
 			return { innitialState }
 		case actions.SET_PUSH_TOKEN:

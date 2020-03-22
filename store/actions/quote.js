@@ -9,7 +9,7 @@ export const SET_FAVORITE_QUOTE = 'SET_FAVORITE_QUOTE';
 
 export const getQuotes = () => {
 	return dispatch => {
-		axios.get(URLs.testBase.concat('/quotes'))
+		axios.get(URLs.base.concat('/quotes'))
 			.then(quotes => {
 				return dispatch({
 					type: GET_QUOTES,
@@ -26,7 +26,7 @@ export const getQuotes = () => {
 
 export const getFavoriteQuotes = () => {
 	return (dispatch, getState) => {
-		axios.get(URLs.testBase.concat('/quotes/favorites'), {
+		axios.get(URLs.base.concat('/quotes/favorites'), {
 			headers: {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
@@ -46,7 +46,7 @@ export const getFavoriteQuotes = () => {
 
 export const getRandomQuote = () => {
 	return dispatch => {
-		axios.get(URLs.testBase.concat('/quotes/random'))
+		axios.get(URLs.base.concat('/quotes/random'))
 			.then(quote => {
 				return dispatch({
 					type: GET_RANDOM_QUOTE,
@@ -63,7 +63,7 @@ export const getRandomQuote = () => {
 export const setFavoriteQuote = (quote) => {
 	return (dispatch, getState) => {
 		console.log("-----------> IN SET FAVORITE QUOTE ACTION <-----------")
-		axios.post(URLs.testBase.concat('/quotes/set_favorite'), {
+		axios.post(URLs.base.concat('/quotes/set_favorite'), {
 			user_id:  getState().auth.userId,
 			quote_id: quote.id
 		}, {

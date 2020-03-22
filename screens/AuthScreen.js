@@ -4,6 +4,7 @@ import * as authActions from '../store/actions/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
 import Colors from '../contants/colors';
+import HeaderIcon from '../navigation/components/HeaderIcon';
 
 const AuthScreen = (props) => {
 	const [email, setEmail] = useState('');
@@ -57,7 +58,6 @@ const AuthScreen = (props) => {
 
 	return (
 		<ScrollView>
-			<Text style={styles.header} > Authenticate </Text>
 			<View style={styles.form}>
 				<View style={styles.formControl}>
 						<Text style={styles.label}>Email</Text>
@@ -101,6 +101,15 @@ const AuthScreen = (props) => {
 		
 		);
 }
+
+AuthScreen.navigationOptions = navData => {
+  return {
+		headerTitle: 'Authenticate',
+    headerLeft: () => (
+      <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
+    )
+   }
+};
 
 const styles = StyleSheet.create({
 		container: {

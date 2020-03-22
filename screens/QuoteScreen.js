@@ -105,7 +105,10 @@ const QuoteScreen = (props) => {
           {/* <Button onPress={() => randomQuotesHandler(allQuotes)} syle={styles.button} title="Next quote" /> */}
           
           {token && (<TouchableOpacity style={styles.likeQuoteContainer} onPress={setFavoriteQuoteHandler}>
-            <Ionicons name='ios-heart' size={50} color='white'/>
+            { isInFavorites(favoriteQuotes, quote) ? 
+              (<Ionicons name='ios-heart' size={50} color='white'/>) : 
+              (<Ionicons name='ios-heart-empty' size={50} color='white'/>)
+            }          
           </TouchableOpacity>)}
           
         </ScrollView>

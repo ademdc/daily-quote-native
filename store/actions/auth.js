@@ -6,10 +6,18 @@ export const LOGIN = 'LOGIN';
 export const SIGN_UP = 'SIGN_UP';
 export const LOGOUT = 'LOGOUT';
 export const SET_PUSH_TOKEN = 'SET_PUSH_TOKEN'
+export const AUTHENTICATE = 'AUTHENTICATE'
+
+export const authenticate = (userId, token) => {
+	console.log('IN AUTHENTICATE ACTION')
+	console.log(userId)
+	console.log(token)
+  return { type: AUTHENTICATE, userId: userId, token: token };
+};
 
 export const login = (email, password) => {
 	return async dispatch => {
-		response = await axios.post(URLs.testBase.concat('/login'), { users: { email: email, password: password }});
+		response = await axios.post(URLs.base.concat('/login'), { users: { email: email, password: password }});
 
 		if(response.status != 200) {
 			console.log("IN FAIL LOGIN")
@@ -17,17 +25,14 @@ export const login = (email, password) => {
 		}
 		console.log("IN SUCCESS LOGIN")
 
-		return dispatch({
-			type: LOGIN,
-			token: response.data.jwt,
-			userId: response.data.userId
-		});
+		dispatch(authenticate(response.data.userId, response.data.jwt));
+		saveDataToStorage(response.data.jwt, response.data.userId);
 	}
 }
 
 export const signUp = (email, password) => {
 	return async dispatch => {
-		response = await axios.post(URLs.testBase.concat('/signup'), { users: { email: email, password: password }});
+		response = await axios.post(URLs.base.concat('/signup'), { users: { email: email, password: password }});
 
 		if(response.status != 200) {
 			console.log("IN FAIL SIGNUP")
@@ -35,17 +40,14 @@ export const signUp = (email, password) => {
 		}
 		console.log("IN SUCCESS SIGUNP")
 
-		return dispatch({
-			type: SIGN_UP,
-			token: response.data.jwt,
-			userId: response.data.userId
-		});
+		dispatch(authenticate(response.data.userId, response.data.jwt))
+		saveDataToStorage(response.data.jwt, response.data.userId);
 	}
 }
 
 export const setPushToken = (token) => {
 	return (dispatch, getState) => {
-		axios.post(URLs.testBase.concat('/users/set_push_token'), 
+		axios.post(URLs.base.concat('/users/set_push_token'), 
 			{ push_token: token }, {
 			headers: {
 				Authorization: 'Bearer ' + getState().auth.token

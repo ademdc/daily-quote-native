@@ -7,20 +7,17 @@ import Colors from '../contants/colors';
 
 const favoriteQuote = (item) => {
 	return(
+		<View style={styles.favoriteQuoteContainer}>
 		<TouchableOpacity>
-			<View style={styles.favoriteQuoteContainer}>
-				<View style={styles.favQuoteImageContainer}>
 					<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
 						<Text style={styles.author}>{item.item.author}</Text>
 						<View style={styles.quoteTextContainer}>
 							<Text style={styles.quoteText}>{item.item.text}</Text>
 						</View>			
 					</ImageBackground>
-				</View>		
-				
-			</View>
-			
 		</TouchableOpacity>
+		</View>
+
 	);
 }
 const FavoritesScreen = (props) => {
@@ -40,16 +37,17 @@ const FavoritesScreen = (props) => {
 		return (
 			<View style={styles.centered}>
 				<Text style={styles.title} >Login to see your favorite quotes.</Text>
-				<Button title='Login' onPress={()=> props.navigation.navigate('AuthScreen')}></Button>
+				<Button title='Login' color={Colors.blueMain} onPress={()=> props.navigation.navigate('AuthScreen')}></Button>
 			</View>
 		)
 	}
 	return (
 		<View style={styles.centered}>
 			{favoriteQuotes.length > 0 ? (<FlatList
-				keyExtractor={item => item.id}
+				keyExtractor={item => item.id.toString()}
 				data={favoriteQuotes}
 				renderItem={favoriteQuote}
+				contentContainerStyle={styles.list}
 			/>) : (
 				<Text style={styles.title}>No favorite quotes added yet.</Text>
 			)}
@@ -82,13 +80,13 @@ const styles = StyleSheet.create({
 	},
 	favoriteQuoteContainer: {
 		padding: 0,
+		margin: 0,
+		flexGrow: 1,
 		borderBottomColor: Colors.babyRose,
 		borderBottomWidth: 3,
-		// backgroundColor: 'yellow',
-		// marginBottom: 10,
 	},
 	favQuoteImageContainer: {
-		height: 200,
+		height: 100,
 		width: '100%'
 	},
 	favQuoteImage: {
@@ -111,6 +109,11 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		color: 'black',
 		padding: 5
+	},
+	list: {
+		// flexGrow: 1
+		// alignItems: 'center',
+		// justifyContent: 'center'
 	}
 })
 
