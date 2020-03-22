@@ -5,10 +5,15 @@ import * as quoteActions from '../store/actions/quote';
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import Colors from '../contants/colors';
 
-const favoriteQuote = (item) => {
+const favoriteQuote = (item, props) => {
 	return(
 		<View style={styles.favoriteQuoteContainer}>
-		<TouchableOpacity>
+		<TouchableOpacity onPress={()=> props.navigation.navigate({
+			routeName: 'FavoriteDetailScreen',
+			params: {
+				quote: item.item
+			}
+		})}>
 					<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
 						<Text style={styles.author}>{item.item.author}</Text>
 						<View style={styles.quoteTextContainer}>
@@ -43,13 +48,14 @@ const FavoritesScreen = (props) => {
 	}
 	return (
 		<View style={styles.centered}>
-			{favoriteQuotes.length > 0 ? (<FlatList
-				keyExtractor={item => item.id.toString()}
-				data={favoriteQuotes}
-				renderItem={favoriteQuote}
-				contentContainerStyle={styles.list}
-			/>) : (
-				<Text style={styles.title}>No favorite quotes added yet.</Text>
+			{favoriteQuotes.length > 0 ? (
+				<FlatList
+					keyExtractor={item => item.id.toString()}
+					data={favoriteQuotes}
+					renderItem={(item) => favoriteQuote(item, props)}
+					contentContainerStyle={styles.list}
+				/>) : (
+					<Text style={styles.title}>No favorite quotes added yet.</Text>
 			)}
 		</View>
 	);
@@ -91,7 +97,7 @@ const styles = StyleSheet.create({
 	},
 	favQuoteImage: {
 		width: '100%',
-		height: '100%',
+		height: 200,
 		justifyContent: 'flex-end',
 	},
 	author: {

@@ -12,11 +12,11 @@ import * as authActions from '../../store/actions/auth';
 import { Ionicons } from '@expo/vector-icons';
 
 const homeText = () => {
-  return(<Text style={styles.drawerItem}><Ionicons name='ios-home' size={20}/> Home </Text>)
+  return(<Text style={styles.drawerItem}><Ionicons name='ios-home' size={20}/>   Home </Text>)
 }
 
 const loginText = (text) => {
-  return(<Text style={styles.drawerItem}><Ionicons name='ios-log-in' size={20}/> {text}</Text>)
+  return(<Text style={styles.drawerItem}><Ionicons name='ios-log-in' size={20}/>   {text}</Text>)
 
 }
 

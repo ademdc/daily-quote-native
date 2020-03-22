@@ -1,13 +1,11 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { defaultStackNavOptions } from './constants';
 import FavoriteScreen from '../../screens/FavoritesScreen';
-import Colors from '../../contants/colors';
-
-import { Platform } from 'react-native';
-
+import FavoriteDetailScreen from '../../screens/FavoriteDetailScreen';
 
 const FavoriteStackNavigator = createStackNavigator({
-  FavoriteScreen: FavoriteScreen 
+  FavoriteScreen: FavoriteScreen,
+  FavoriteDetailScreen: FavoriteDetailScreen
   },{
     defaultNavigationOptions: defaultStackNavOptions
   });
