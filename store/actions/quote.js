@@ -46,7 +46,7 @@ export const getFavoriteQuotes = () => {
 
 export const getRandomQuote = () => {
 	return dispatch => {
-		axios.get(URLs.base.concat('/quotes/random'))
+		axios.get(URLs.base.concat('/quotes/daily'))
 			.then(quote => {
 				return dispatch({
 					type: GET_RANDOM_QUOTE,
