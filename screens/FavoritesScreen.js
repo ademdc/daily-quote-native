@@ -14,12 +14,12 @@ const favoriteQuote = (item, props) => {
 				quote: item.item
 			}
 		})}>
-					<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
-						<Text style={styles.author}>{item.item.author}</Text>
-						<View style={styles.quoteTextContainer}>
-							<Text style={styles.quoteText}>{item.item.text}</Text>
-						</View>			
-					</ImageBackground>
+			<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
+				<Text style={styles.author}>{item.item.author}</Text>
+				<View style={styles.quoteTextContainer}>
+					<Text style={styles.quoteText}>{item.item.text}</Text>
+				</View>			
+			</ImageBackground>
 		</TouchableOpacity>
 		</View>
 
@@ -32,7 +32,6 @@ const FavoritesScreen = (props) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		console.log('-------> USE EFFECT OF FAVORITE SCREEN <------------')
 		if(token) {
 			dispatch(quoteActions.getFavoriteQuotes());
 		}
@@ -49,7 +48,7 @@ const FavoritesScreen = (props) => {
 	return (
 		<View style={styles.centered}>
 			{favoriteQuotes.length > 0 ? (
-				<FlatList
+				<FlatList 
 					keyExtractor={item => item.id.toString()}
 					data={favoriteQuotes}
 					renderItem={(item) => favoriteQuote(item, props)}
@@ -88,15 +87,17 @@ const styles = StyleSheet.create({
 		padding: 0,
 		margin: 0,
 		flexGrow: 1,
+		width: '100%',
 		borderBottomColor: Colors.babyRose,
 		borderBottomWidth: 3,
 	},
 	favQuoteImageContainer: {
 		height: 100,
-		width: '100%'
+		width: '100%',
+		overflow: 'hidden'
 	},
 	favQuoteImage: {
-		width: '100%',
+		width: 400,
 		height: 200,
 		justifyContent: 'flex-end',
 	},
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
 		padding: 5
 	},
 	list: {
-		// flexGrow: 1
+		// width: '100%'
+		flexGrow: 1
 		// alignItems: 'center',
 		// justifyContent: 'center'
 	}

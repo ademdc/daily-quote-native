@@ -4,15 +4,10 @@ import {
   Image,
   StyleSheet,
   Text,
-  ImageBackground,
   ScrollView
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
-
-import Colors from '../contants/colors';
-import * as authActions from '../store/actions/auth';
-
 
 const FavoriteDetailScreen = props => {
   const dispatch = useDispatch();

@@ -1,19 +1,10 @@
 import React from 'react';
-
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-
-
-// import QuoteScreen from '../../screens/QuoteScreen';
 import QuoteStackNavigator from '../stack/QuoteStackNavigator';
 import FavoriteStackNavigator from '../stack/FavoriteStackNavigator';
-
-// import FavoritesScreen from '../../screens/FavoritesScreen';
-import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../contants/colors';
 
-// const QuoteStackNavigator = createStackNavigator({
-// 	QuoteScreen: QuoteScreen
-// });
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
 const MainTabNavigator = createBottomTabNavigator({
 	QuoteScreen: {

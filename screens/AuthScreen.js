@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, ScrollView, TextInput, ActivityIndicator} from "react-native";
-import * as authActions from '../store/actions/auth';
-import { useSelector, useDispatch } from 'react-redux';
-import { showMessage } from "react-native-flash-message";
 import Colors from '../contants/colors';
 import HeaderIcon from '../navigation/components/HeaderIcon';
+
+import { StyleSheet, View, Text, Button, ScrollView, TextInput, ActivityIndicator} from "react-native";
+import { useSelector, useDispatch } from 'react-redux';
+import { showMessage } from "react-native-flash-message";
+
+import * as authActions from '../store/actions/auth';
 
 const AuthScreen = (props) => {
 	const [email, setEmail] = useState('');
@@ -12,7 +14,6 @@ const AuthScreen = (props) => {
 	const [error, setError] = useState(false);
 	const [isSignup, setIsSignup] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const token = useSelector(state => state.auth.token);
 	const dispatch = useDispatch();
 
 	const authHandler = () => {
@@ -30,7 +31,6 @@ const AuthScreen = (props) => {
 
 		dispatch(action)
 			.then(response => {
-				console.log(response)
 				setIsLoading(false);
 				showMessage({
 					message: "Successfully logged in",
@@ -40,7 +40,6 @@ const AuthScreen = (props) => {
 			}).catch(error => {
 				console.log('IN CATCH OF DISPATCH auth actions')
 				setError(error.message);
-				console.log(error.message)
 				setIsLoading(false);
 			})
 		
@@ -112,35 +111,35 @@ AuthScreen.navigationOptions = navData => {
 };
 
 const styles = StyleSheet.create({
-		container: {
-			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center'
-		},
-    form: {
-      margin: 20
-    },
-    header: {
-				fontSize: 30,
-				textAlign: 'center',
-				marginVertical: 30
-    },
-    formControl: {
-      width: '100%'
-    },
-    label: {
-      // fontFamily: 'open-sans-bold',
-      marginVertical: 8
-    },
-    input: {
-      paddingHorizontal: 2,
-      paddingVertical: 5,
-      borderBottomColor: '#ccc',
-      borderBottomWidth: 1
-		},
-		buttonContainer: {
-			marginTop: 10
-		}
-  });
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	form: {
+		margin: 20
+	},
+	header: {
+			fontSize: 30,
+			textAlign: 'center',
+			marginVertical: 30
+	},
+	formControl: {
+		width: '100%'
+	},
+	label: {
+		// fontFamily: 'open-sans-bold',
+		marginVertical: 8
+	},
+	input: {
+		paddingHorizontal: 2,
+		paddingVertical: 5,
+		borderBottomColor: '#ccc',
+		borderBottomWidth: 1
+	},
+	buttonContainer: {
+		marginTop: 10
+	}
+});
 
 export default AuthScreen;

@@ -62,7 +62,6 @@ export const getRandomQuote = () => {
 
 export const setFavoriteQuote = (quote) => {
 	return (dispatch, getState) => {
-		console.log("-----------> IN SET FAVORITE QUOTE ACTION <-----------")
 		axios.post(URLs.base.concat('/quotes/set_favorite'), {
 			user_id:  getState().auth.userId,
 			quote_id: quote.id

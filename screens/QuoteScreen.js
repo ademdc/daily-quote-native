@@ -1,25 +1,22 @@
 import React, { useState, useEffect, Fragment, useRef, useCallback } from "react";
+import Constants from 'expo-constants';
+import HeaderIcon from '../navigation/components/HeaderIcon';
+
 import { StyleSheet, View, Text, Button, TouchableOpacity, ScrollView, ActivityIndicator, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
-import * as quoteActions from '../store/actions/quote';
-import * as authActions from '../store/actions/auth';
-
-import * as Permissions from 'expo-permissions';
-import Constants from 'expo-constants';
 import { Notifications } from 'expo';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-import HeaderIcon from '../navigation/components/HeaderIcon';
 import { Ionicons } from '@expo/vector-icons';
 import { showMessage } from "react-native-flash-message";
+
+import * as quoteActions from '../store/actions/quote';
+import * as authActions from '../store/actions/auth';
+import * as Permissions from 'expo-permissions';
 
 const isInFavorites = (allQuotes, quote) => {
   return allQuotes.map(q => q.text).includes(quote.text)
 }
 
 const QuoteScreen = (props) => {
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState();
-	const allQuotes = useSelector(state => state.quote.quotes)
   const quote = useSelector(state => state.quote.quote)
   const token = useSelector(state => state.auth.token)
   const pushToken = useSelector(state => state.auth.pushToken)
@@ -81,7 +78,6 @@ const QuoteScreen = (props) => {
         type: "success",
       })
     } catch(error) {
-      console.log(error)
     }
     
   }
@@ -101,9 +97,7 @@ const QuoteScreen = (props) => {
           <Fragment>
             <Text style={styles.quoteText}>{quote.text}</Text>
             <Text style={styles.quoteAuthor}>{quote.author}</Text> 
-          </Fragment>
-          {/* <Button onPress={() => randomQuotesHandler(allQuotes)} syle={styles.button} title="Next quote" /> */}
-          
+          </Fragment>          
           {token && (<TouchableOpacity style={styles.likeQuoteContainer} onPress={setFavoriteQuoteHandler}>
             { isInFavorites(favoriteQuotes, quote) ? 
               (<Ionicons name='ios-heart' size={50} color='white'/>) : 

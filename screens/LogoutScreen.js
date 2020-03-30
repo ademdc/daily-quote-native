@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button, ScrollView, TextInput} from "react-native";
-import * as authActions from '../store/actions/auth';
 import { useSelector, useDispatch } from 'react-redux';
+
+import * as authActions from '../store/actions/auth';
 
 const LogoutScreen = () => {
 	const [email, setEmail] = useState('');
@@ -42,31 +43,31 @@ const LogoutScreen = () => {
 }
 
 const styles = StyleSheet.create({
-		container: {
-			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center'
-		},
-    form: {
-      margin: 20
-    },
-    header: {
-				fontSize: 30,
-				textAlign: 'center',
-				marginVertical: 30
-    },
-    formControl: {
-      width: '100%'
-    },
-    label: {
-      marginVertical: 8
-    },
-    input: {
-      paddingHorizontal: 2,
-      paddingVertical: 5,
-      borderBottomColor: '#ccc',
-      borderBottomWidth: 1
-    }
-  });
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	form: {
+		margin: 20
+	},
+	header: {
+			fontSize: 30,
+			textAlign: 'center',
+			marginVertical: 30
+	},
+	formControl: {
+		width: '100%'
+	},
+	label: {
+		marginVertical: 8
+	},
+	input: {
+		paddingHorizontal: 2,
+		paddingVertical: 5,
+		borderBottomColor: '#ccc',
+		borderBottomWidth: 1
+	}
+});
 
 export default LogoutScreen;
