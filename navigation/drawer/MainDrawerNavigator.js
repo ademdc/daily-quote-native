@@ -21,8 +21,8 @@ const loginText = (text) => {
 }
 
 let drawerItems = {
-  HomeScreen:  {screen: MainTabNavigator, navigationOptions: { drawerLabel: homeText}},
-  AuthScreen:  {screen: AuthStackScreen, navigationOptions: { drawerLabel: NullComponent}}
+  HomeScreen:  {screen: MainTabNavigator, navigationOptions: { drawerLabel: homeText }},
+  AuthScreen:  {screen: AuthStackScreen, navigationOptions: { drawerLabel: NullComponent }}
 }
 const MainDrawerNavigator = createDrawerNavigator(
 	drawerItems,

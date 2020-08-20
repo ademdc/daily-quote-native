@@ -45,8 +45,11 @@ export const getFavoriteQuotes = () => {
 }
 
 export const getRandomQuote = () => {
-	return dispatch => {
-		axios.get(URLs.base.concat('/quotes/daily'))
+	return (dispatch, getState) => {
+		axios.get(URLs.base.concat('/quotes/daily'), {
+			headers: {
+				Authorization: 'Bearer ' + getState().auth.token
+			}})
 			.then(quote => {
 				return dispatch({
 					type: GET_RANDOM_QUOTE,

@@ -1,6 +1,8 @@
 import React from 'react';
 import QuoteStackNavigator from '../stack/QuoteStackNavigator';
 import FavoriteStackNavigator from '../stack/FavoriteStackNavigator';
+import FeelingStackNavigator from '../stack/FeelingStackNavigator';
+
 import Colors from '../../contants/colors';
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -22,6 +24,15 @@ const MainTabNavigator = createBottomTabNavigator({
 			tabBarLabel: 'Favorites',
 			tabBarIcon: (tabInfo) => {
 				return (<Ionicons name='ios-star' size={25} color={tabInfo.tintColor} />);
+			}
+		}
+	},
+	FeelingScreen: {
+		screen: FeelingStackNavigator,
+		navigationOptions: {
+			tabBarLabel: 'Feelings',
+			tabBarIcon: (tabInfo) => {
+				return (<Ionicons name='ios-body' size={25} color={tabInfo.tintColor} />);
 			}
 		}
 	}
