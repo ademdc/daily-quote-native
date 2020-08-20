@@ -8,9 +8,9 @@ const GridTile = props => {
 			style={{...styles.renderItem, backgroundColor: props.itemData.item.color}} 
 			onPress={()=> { 
 				props.navigation.navigate({
-					routeName: 'CategoryMeals',
+					routeName: 'FeelingDetail',
 					params: {
-						categoryId: props.itemData.item.id
+						feeling: props.itemData.item.title
 					}
 				});
 			}}>

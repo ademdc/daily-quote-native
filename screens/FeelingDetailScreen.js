@@ -3,34 +3,37 @@ import {
   View,
   Image,
   StyleSheet,
-  FlatList,
   Text,
   ScrollView
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
-import { FEELINGS } from '../data/data';
 
-import GridTile from '../components/GridTile';
-
-const FeelingScreen = props => {
+const FeelingDetailScreen = props => {
   const dispatch = useDispatch();
-  // const quote = props.navigation.getParam('quote')
+  const feeling = props.navigation.getParam('feeling')
 
   useEffect(() => {
     
   }, [dispatch]);
 
   return (
-    <View style={styles.screen}>
-			<FlatList 
-				data={FEELINGS} 
-				numColumns={2}
-				renderItem={(itemData) => <GridTile navigation={props.navigation} itemData={itemData} />}
-			/>
-		</View>
+    <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={styles.screen}>
+        <Text>Feeling details for {feeling}</Text>
+      </View>
+    </ScrollView>
+    
   );
 };
+
+// FeelingDetailScreen.navigationOptions = (navigationData) => {
+//   const quoteAuthor = navigationData.navigation.getParam('quote').author
+
+//   return { 
+//     headerTitle: quoteAuthor
+//    }
+// };
 
 const styles = StyleSheet.create({
   screen: {
@@ -69,4 +72,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FeelingScreen;
+export default FeelingDetailScreen;
