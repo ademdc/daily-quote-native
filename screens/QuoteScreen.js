@@ -113,7 +113,7 @@ const QuoteScreen = (props) => {
 
 QuoteScreen.navigationOptions = navData => {
   return {
-    headerTitle: 'Mašnica daily quote',
+    headerTitle: 'Mašnica Daily Quote',
     headerLeft: () => (
       <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
     )

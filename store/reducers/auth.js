@@ -3,7 +3,8 @@ import * as actions from '../actions/auth';
 const innitialState = {
 	token: null,
 	userId: null,
-	pushToken: null
+	pushToken: null,
+	partner: null
 }
 
 const authReducer = (state = innitialState, action) => {
@@ -14,6 +15,8 @@ const authReducer = (state = innitialState, action) => {
 			return { innitialState }
 		case actions.SET_PUSH_TOKEN:
 			return { ...state, pushToken: action.pushToken }
+		case actions.SET_PARTNER:
+				return { ...state, partner: action.partner }
 		default:
 			return state;
 	}

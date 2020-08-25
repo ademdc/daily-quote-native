@@ -7,6 +7,7 @@ export const SIGN_UP = 'SIGN_UP';
 export const LOGOUT = 'LOGOUT';
 export const SET_PUSH_TOKEN = 'SET_PUSH_TOKEN'
 export const AUTHENTICATE = 'AUTHENTICATE'
+export const SET_PARTNER = 'SET_PARTNER'
 
 export const authenticate = (userId, token) => {
   return { type: AUTHENTICATE, userId: userId, token: token };
@@ -50,6 +51,21 @@ export const setPushToken = (token) => {
 			.catch(error => {
 				console.log(error)
 				return false;
+		});
+	}
+}
+
+export const setPartner = () => {
+	return (dispatch, getState) => {
+		axios.get(URLs.base.concat('/users/get_partner'), {
+			headers: {
+				Authorization: 'Bearer ' + getState().auth.token
+			}})
+			.then(user => {
+				return dispatch({ type: SET_PARTNER, partner: user.data });
+			})
+			.catch(error => {
+				console.log(error)
 		});
 	}
 }

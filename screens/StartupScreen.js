@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 
 import Colors from '../contants/colors';
 import * as authActions from '../store/actions/auth';
+import * as quoteActions from '../store/actions/quote';
+import * as feelingActions from '../store/actions/feeling';
 
 
 const StartupScreen = props => {
@@ -28,6 +30,9 @@ const StartupScreen = props => {
 
       props.navigation.navigate('MainDrawerNavigator');
       dispatch(authActions.authenticate(userId, token));
+      dispatch(authActions.setPartner());
+      dispatch(quoteActions.getFavoriteQuotes());
+      dispatch(feelingActions.getLatestFeelings(userId));
     };
 
     tryLogin();

@@ -1,33 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   View,
   Image,
   StyleSheet,
-  FlatList,
+  TouchableOpacity,
   Text,
   ScrollView
 } from 'react-native';
 
-import { useDispatch } from 'react-redux';
-import { FEELINGS } from '../data/data';
+import { useDispatch, useSelector } from 'react-redux';
+import * as feelingActions from '../store/actions/feeling';
 
-import GridTile from '../components/GridTile';
 
 const FeelingScreen = props => {
   const dispatch = useDispatch();
-  // const quote = props.navigation.getParam('quote')
+  const partnerFeeling = useSelector(state => state.feeling.partnerFeeling)
+  const latestFeeling = useSelector(state => state.feeling.latestFeeling)
+  const userId = useSelector(state => state.auth.userId)
+  const partner = useSelector(state => state.auth.partner)
 
   useEffect(() => {
-    
-  }, [dispatch]);
+    //getLatestFeeling()
+  }, []);
 
   return (
     <View style={styles.screen}>
-			<FlatList 
-				data={FEELINGS} 
-				numColumns={2}
-				renderItem={(itemData) => <GridTile navigation={props.navigation} itemData={itemData} />}
-			/>
+			<Text>Feeling screen</Text>
+        <Text>Your are feeling {latestFeeling.name}</Text>
+        <Text>Your partner {partner.first_name} is feeling {partnerFeeling.name}</Text>
+        
+      <TouchableOpacity  
+        style={{}} 
+        onPress={()=> { 
+          props.navigation.navigate({
+            routeName: 'FeelingDetail',
+            params: {
+              feeling: 'Title'
+            }
+          });
+        }}>
+        <View>
+          <Text style={{}}> How do you feel now? </Text>
+        </View>
+      </TouchableOpacity>
 		</View>
   );
 };

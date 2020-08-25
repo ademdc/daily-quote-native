@@ -3,27 +3,29 @@ import {
   View,
   Image,
   StyleSheet,
-  Text,
+  FlatList,
   ScrollView
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
+import GridTile from '../components/GridTile';
+import { FEELINGS } from '../data/data';
 
 const FeelingDetailScreen = props => {
   const dispatch = useDispatch();
-  const feeling = props.navigation.getParam('feeling')
 
   useEffect(() => {
     
   }, [dispatch]);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
-      <View style={styles.screen}>
-        <Text>Feeling details for {feeling}</Text>
-      </View>
-    </ScrollView>
-    
+    <View style={styles.screen}>
+			<FlatList 
+				data={FEELINGS} 
+				numColumns={2}
+				renderItem={(itemData) => <GridTile navigation={props.navigation} itemData={itemData} />}
+			/>
+		</View>
   );
 };
 

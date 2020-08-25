@@ -31,7 +31,6 @@ export const getFavoriteQuotes = () => {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
 			.then(quotes => {
-				console.log(quotes.data)
 				return dispatch({
 					type: GET_FAVORITE_QUOTES,
 					favoriteQuotes: quotes.data
