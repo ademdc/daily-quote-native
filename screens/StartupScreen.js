@@ -33,6 +33,7 @@ const StartupScreen = props => {
       dispatch(authActions.setPartner());
       dispatch(quoteActions.getFavoriteQuotes());
       dispatch(feelingActions.getLatestFeelings(userId));
+      dispatch(feelingActions.getAllFeelings());
     };
 
     tryLogin();

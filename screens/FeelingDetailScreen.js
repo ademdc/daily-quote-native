@@ -7,13 +7,13 @@ import {
   ScrollView
 } from 'react-native';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import GridTile from '../components/GridTile';
-import { FEELINGS } from '../data/data';
 
 const FeelingDetailScreen = props => {
   const dispatch = useDispatch();
-
+  const allFeelings = useSelector(state => state.feeling.allFeelings)
+  
   useEffect(() => {
     
   }, [dispatch]);
@@ -21,7 +21,7 @@ const FeelingDetailScreen = props => {
   return (
     <View style={styles.screen}>
 			<FlatList 
-				data={FEELINGS} 
+				data={allFeelings} 
 				numColumns={2}
 				renderItem={(itemData) => <GridTile navigation={props.navigation} itemData={itemData} />}
 			/>

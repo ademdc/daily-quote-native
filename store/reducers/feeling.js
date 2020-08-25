@@ -13,10 +13,11 @@ const feelingReducer = (state = innitialState, action) => {
     case actions.GET_ALL_FEELINGS:
 			return { ...state, allFeelings: action.allFeelings }
 		case actions.GET_LATEST_FEELINGS:
-      console.log (action)
 			return { ...state, latestFeeling: action.latestFeeling, partnerFeeling: action.partnerFeeling }
 		case actions.GET_CURRENT_FEELING:
-			return { ...state, currentFeeling: action.currentFeeling }
+      return { ...state, currentFeeling: action.currentFeeling }
+    case actions.SET_NEW_LATEST_FEELING:
+      return { ...state, latestFeeling: action.latestFeeling }
 		default:
 			return state;
 	}

@@ -1,21 +1,38 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Colors from '../contants/colors';
+import { showMessage } from "react-native-flash-message";
+import * as feelingActions from '../store/actions/feeling';
+import { useDispatch } from 'react-redux';
 
 const GridTile = props => {
+	const dispatch = useDispatch();
+
+	const feelingHandler = (feeling_id) => {
+		console.log(`feeling_id: ${feeling_id}`)
+		try {
+      dispatch(feelingActions.setNewLatestFeeling(feeling_id))
+      showMessage({
+        message: "You changed your mood",
+        type: "success",
+      })
+    } catch(error) {
+		}
+		
+		props.navigation.navigate({
+			routeName: 'Feeling',
+			params: {
+				feeling: props.itemData.title
+			}
+		});
+	}
+
 	return(
 		<TouchableOpacity  
 			style={{...styles.renderItem, backgroundColor: props.itemData.item.color}} 
-			onPress={()=> { 
-				props.navigation.navigate({
-					routeName: 'FeelingDetail',
-					params: {
-						feeling: props.itemData.item.title
-					}
-				});
-			}}>
+			onPress={() => feelingHandler(props.itemData.item.id)}>
 			<View>
-				<Text style={styles.itemText}> {props.itemData.item.title} </Text>
+				<Text style={styles.itemText}> {props.itemData.item.name} </Text>
 			</View>
 		</TouchableOpacity>
 	);

@@ -25,7 +25,6 @@ const FeelingScreen = props => {
 
   return (
     <View style={styles.screen}>
-			<Text>Feeling screen</Text>
         <Text>Your are feeling {latestFeeling.name}</Text>
         <Text>Your partner {partner.first_name} is feeling {partnerFeeling.name}</Text>
         
