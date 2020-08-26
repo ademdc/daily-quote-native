@@ -5,81 +5,82 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
-import * as feelingActions from '../store/actions/feeling';
+import { showMessage } from "react-native-flash-message";
 
+import HeaderIcon from '../navigation/components/HeaderIcon';
+import FeelingContainer from '../components/FeelingContainer';
 
 const FeelingScreen = props => {
   const dispatch = useDispatch();
-  const partnerFeeling = useSelector(state => state.feeling.partnerFeeling)
-  const latestFeeling = useSelector(state => state.feeling.latestFeeling)
-  const userId = useSelector(state => state.auth.userId)
+  const partnerUserFeeling = useSelector(state => state.feeling.partnerFeeling)
+  const latestUserFeeling = useSelector(state => state.feeling.latestFeeling)
+  const allFeelings = useSelector(state => state.feeling.allFeelings)
   const partner = useSelector(state => state.auth.partner)
 
-  useEffect(() => {
-    //getLatestFeeling()
-  }, []);
+  const latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
+  const partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
+
+  const goToFeelingDetail = () => {
+    props.navigation.navigate({
+      routeName: 'FeelingDetail',
+    });
+  }
 
   return (
-    <View style={styles.screen}>
-        <Text>Your are feeling {latestFeeling.name}</Text>
-        <Text>Your partner {partner.first_name} is feeling {partnerFeeling.name}</Text>
-        
-      <TouchableOpacity  
-        style={{}} 
-        onPress={()=> { 
-          props.navigation.navigate({
-            routeName: 'FeelingDetail',
-            params: {
-              feeling: 'Title'
-            }
-          });
-        }}>
-        <View>
-          <Text style={{}}> How do you feel now? </Text>
-        </View>
-      </TouchableOpacity>
-		</View>
+    <ScrollView style={{flex: 1, backgroundColor: 'white'}} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>    
+      <View style={styles.screen}>
+        <FeelingContainer userFeeling={latestUserFeeling} feeling={latestFeeling} text={'You are feeling'}/>
+        <FeelingContainer userFeeling={partnerUserFeeling} feeling={partnerFeeling} text={`${partner.first_name} is feeling`}/>
+          
+        <TouchableOpacity  
+          style={{padding: 20}} 
+          onPress={goToFeelingDetail}>
+          <Text style={styles.feelingText}> How do you feel now? </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
+FeelingScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Feeling Of The Day',
+    headerLeft: () => (
+      <HeaderIcon icon='ios-refresh' onPress={()=> showMessage({message: "Refreshed latest feelings", type: "info"})}/>
+    )
+   }
+};
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
   },
-  quoteTextContainer: {
+  feelingContainer: {
+    padding: 20,
     flex: 1,
-    justifyContent: 'center',
+    width: '100%',
+    height: 300,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%'
   },
-  quoteImageContainer: {
-    width: '100%',
-    height: 200
+  feelingText: {
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontFamily: 'ibm-plex-light'
   },
-  quoteImage: {
-    width: '100%',
-    height: '100%'
-  },
-  quoteAuthor: {
-
-  },
-  quoteText: {
-    textAlign: 'center',
-    fontFamily: 'ibm-plex-thin',
-    fontSize: 30,
-    paddingVertical: 20,
-    paddingHorizontal: 10
-  },
-  masnicaLogoContainer: {
-    height: 100,
-    width:  100
+  feeling: {
+    fontSize: 50,
+    fontStyle: 'normal',
+    fontFamily: 'ibm-plex-light'
   }
 });
 

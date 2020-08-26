@@ -27,8 +27,6 @@ export const getCurrentFeeling = (feeling_id) => {
 	}
 }
 
-
-
 export const getAllFeelings = () => {
 	return (dispatch, getState) => {
 		axios.get(URLs.base.concat('/feelings'), {
@@ -60,13 +58,13 @@ export const getLatestFeelings = (user_id) => {
 }
 
 export const setNewLatestFeeling = (feeling_id) => {
-  console.log('in setNewLatestFeeling')
 	return (dispatch, getState) => {
 		axios.post(URLs.base.concat(`/feelings/create_user_feeling?feeling_id=${feeling_id}`), {}, {
 			headers: {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
 			.then(feeling => {
+        getLatestFeelings(getState().auth.userId)
 				return dispatch({ type: SET_NEW_LATEST_FEELING, latestFeeling: feeling.data });
 			})
 			.catch(error => {

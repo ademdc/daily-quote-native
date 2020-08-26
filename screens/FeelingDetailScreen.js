@@ -29,13 +29,11 @@ const FeelingDetailScreen = props => {
   );
 };
 
-// FeelingDetailScreen.navigationOptions = (navigationData) => {
-//   const quoteAuthor = navigationData.navigation.getParam('quote').author
-
-//   return { 
-//     headerTitle: quoteAuthor
-//    }
-// };
+FeelingDetailScreen.navigationOptions = (navigationData) => {
+  return { 
+    headerTitle: 'How do you feel now?'
+   }
+};
 
 const styles = StyleSheet.create({
   screen: {

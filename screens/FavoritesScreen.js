@@ -13,7 +13,7 @@ const favoriteQuote = (item, props) => {
 			params: {
 				quote: item.item
 			}
-		})}>
+			})}>
 			<ImageBackground style={styles.favQuoteImage} source={{uri: item.item.image_url}}>
 				<Text style={styles.author}>{item.item.author}</Text>
 				<View style={styles.quoteTextContainer}>
