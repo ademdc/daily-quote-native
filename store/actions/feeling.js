@@ -5,7 +5,7 @@ export const GET_LATEST_FEELINGS = 'GET_LATEST_FEELING';
 export const GET_CURRENT_FEELING = 'GET_CURRENT_FEELING';
 export const GET_ALL_FEELINGS = 'GET_ALL_FEELINGS';
 export const SET_NEW_LATEST_FEELING = 'SET_NEW_LATEST_FEELING';
-
+export const GET_USER_FEELINGS = 'GET_USER_FEELINGS';
 
 export const authenticate = (userId, token) => {
   return { type: AUTHENTICATE, userId: userId, token: token };
@@ -34,7 +34,8 @@ export const getAllFeelings = () => {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
 			.then(user => {
-				return dispatch({ type: GET_ALL_FEELINGS, allFeelings: user.data });
+        dispatch({ type: GET_ALL_FEELINGS, allFeelings: user.data });
+        return user;
 			})
 			.catch(error => {
 				console.log(error)
@@ -66,6 +67,22 @@ export const setNewLatestFeeling = (feeling_id) => {
 			.then(feeling => {
         getLatestFeelings(getState().auth.userId)
 				return dispatch({ type: SET_NEW_LATEST_FEELING, latestFeeling: feeling.data });
+			})
+			.catch(error => {
+				console.log(error)
+		});
+	}
+}
+
+
+export const getUserFeelings = (feeling_id, user_id) => {
+	return (dispatch, getState) => {
+		axios.get(URLs.base.concat(`/feelings/user_feeling?user_id=${user_id}&feeling_id=${feeling_id}`), {
+			headers: {
+				Authorization: 'Bearer ' + getState().auth.token
+			}})
+			.then(feeling => {
+				return dispatch({ type: GET_USER_FEELINGS, userFeeling: feeling.data });
 			})
 			.catch(error => {
 				console.log(error)

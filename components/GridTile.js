@@ -9,7 +9,6 @@ const GridTile = props => {
 	const dispatch = useDispatch();
 
 	const feelingHandler = (feeling_id) => {
-		console.log(`feeling_id: ${feeling_id}`)
 		try {
       dispatch(feelingActions.setNewLatestFeeling(feeling_id))
       showMessage({

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Image,
@@ -9,21 +9,26 @@ import {
   Alert
 } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
 
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import FeelingContainer from '../components/FeelingContainer';
 
 const FeelingScreen = props => {
-  const dispatch = useDispatch();
+  const userId = useSelector(state => state.auth.userId)
   const partnerUserFeeling = useSelector(state => state.feeling.partnerFeeling)
   const latestUserFeeling = useSelector(state => state.feeling.latestFeeling)
   const allFeelings = useSelector(state => state.feeling.allFeelings)
   const partner = useSelector(state => state.auth.partner)
 
-  const latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
-  const partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
+  latestFeeling = null;
+  partnerFeeling = null;
+  if(latestUserFeeling && partnerUserFeeling) {
+    const latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
+    const partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
+  }
+ 
 
   const goToFeelingDetail = () => {
     props.navigation.navigate({
@@ -34,8 +39,19 @@ const FeelingScreen = props => {
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>    
       <View style={styles.screen}>
-        <FeelingContainer userFeeling={latestUserFeeling} feeling={latestFeeling} text={'You are feeling'}/>
-        <FeelingContainer userFeeling={partnerUserFeeling} feeling={partnerFeeling} text={`${partner.first_name} is feeling`}/>
+
+        <FeelingContainer 
+          userFeeling={latestUserFeeling} 
+          feeling={latestFeeling} 
+          text='You are feeling'
+          userId={userId}
+        />
+        <FeelingContainer 
+          userFeeling={partnerUserFeeling} 
+          feeling={partnerFeeling} 
+          text={`${partner.first_name} is feeling`}
+          userId={partner.id}
+        />
           
         <TouchableOpacity  
           style={{padding: 20}} 
