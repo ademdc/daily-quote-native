@@ -6,7 +6,8 @@ const innitialState = {
   latestFeeling: null,
   currentFeeling: null,
   allFeelings: null,
-  userFeeling: null
+  userFeeling: null,
+  loading: false
 }
 
 const feelingReducer = (state = innitialState, action) => {
@@ -21,6 +22,10 @@ const feelingReducer = (state = innitialState, action) => {
       return { ...state, latestFeeling: action.latestFeeling }
     case actions.GET_USER_FEELINGS:
       return { ...state, userFeeling: action.userFeeling }
+    case actions.RESET_USER_FEELINGS:
+      return { ...state, partnerFeeling: null, latestFeeling: null }
+    case actions.SET_LOADING:
+      return { ...state, loading: action.loading }
 		default:
 			return state;
 	}

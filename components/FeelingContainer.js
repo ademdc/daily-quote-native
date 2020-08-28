@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 
 import { showMessage } from "react-native-flash-message";
-import * as feelingActions from '../store/actions/feeling';
+import URLs from '../contants/urls';
+import axios from 'axios';
+
 
 const FeelingContainer = (props) => {
-  const dispatch = useDispatch();
-  const userFeeling = useSelector(state => state.feeling.userFeeling)
+  const token = useSelector(state => state.auth.token)
 
   const getFeelingTime = (feeling) => {
     var date = new Date(feeling.created_at).toString().split('GMT')[0]
@@ -25,12 +26,19 @@ const FeelingContainer = (props) => {
   } 
 
   const getFeelingDetails = (feeling) => {
-    dispatch(feelingActions.getUserFeelings(feeling.id, props.userId))
-
-    showMessage({
-      message: `There are ${(userFeeling || []).length} ${feeling.name} feelings in the last month for that user.`,
-      type: "info",
-    })
+    axios.get(URLs.base.concat(`/feelings/user_feeling?user_id=${props.userFeeling.user_id}&feeling_id=${feeling.id}`), {
+			headers: {
+				Authorization: 'Bearer ' + token
+			}})
+			.then(feelingResponse => {
+        showMessage({
+          message: `There are ${(feelingResponse.data || []).length} ${feeling.name} feelings in the last month for that user.`,
+          type: "info",
+        })
+			})
+			.catch(error => {
+				console.log(error)
+		});
   }
 
   if(!props.feeling && !props.userFeeling) {

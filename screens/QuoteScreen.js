@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment, useRef, useCallback } from "react";
 import Constants from 'expo-constants';
 import HeaderIcon from '../navigation/components/HeaderIcon';
+import LoadingScreen from '../components/LoadingScreen';
 
 import { StyleSheet, View, Text, Button, TouchableOpacity, ScrollView, ActivityIndicator, ImageBackground } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
@@ -84,9 +85,7 @@ const QuoteScreen = (props) => {
   
 	if (!quote) {
 		return (
-			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-				<ActivityIndicator size='large' />
-			</View>
+      <LoadingScreen />
 			);
 	} 
 

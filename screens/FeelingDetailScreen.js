@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import {
   View,
-  Image,
   StyleSheet,
   FlatList,
-  ScrollView
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';

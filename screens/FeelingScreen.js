@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Image,
@@ -14,6 +14,7 @@ import { showMessage } from "react-native-flash-message";
 
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import FeelingContainer from '../components/FeelingContainer';
+import LoadingScreen from '../components/LoadingScreen';
 
 const FeelingScreen = props => {
   const userId = useSelector(state => state.auth.userId)
@@ -21,19 +22,24 @@ const FeelingScreen = props => {
   const latestUserFeeling = useSelector(state => state.feeling.latestFeeling)
   const allFeelings = useSelector(state => state.feeling.allFeelings)
   const partner = useSelector(state => state.auth.partner)
+  const loading = useSelector(state => state.feeling.loading)
 
-  latestFeeling = null;
-  partnerFeeling = null;
-  if(latestUserFeeling && partnerUserFeeling) {
-    const latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
-    const partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
-  }
- 
+  let latestFeeling = null;
+  let partnerFeeling = null;
 
   const goToFeelingDetail = () => {
     props.navigation.navigate({
       routeName: 'FeelingDetail',
     });
+  }
+  
+  if(loading){
+    return <LoadingScreen />
+  }
+
+  if(latestUserFeeling && partnerUserFeeling) {
+    latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
+    partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
   }
 
   return (
@@ -68,6 +74,9 @@ FeelingScreen.navigationOptions = navData => {
     headerTitle: 'Feeling Of The Day',
     headerLeft: () => (
       <HeaderIcon icon='ios-refresh' onPress={()=> showMessage({message: "Refreshed latest feelings", type: "info"})}/>
+    ),
+    headerRight: () => (
+      <HeaderIcon icon='ios-calendar' onPress={()=>navData.navigation.navigate({ routeName: 'FeelingDetail' })}/>
     )
    }
 };

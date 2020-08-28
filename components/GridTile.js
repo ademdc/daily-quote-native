@@ -10,12 +10,13 @@ const GridTile = props => {
 
 	const feelingHandler = (feeling_id) => {
 		try {
-      dispatch(feelingActions.setNewLatestFeeling(feeling_id))
+			dispatch(feelingActions.setNewLatestFeeling(feeling_id))
       showMessage({
         message: "You changed your mood",
         type: "success",
       })
     } catch(error) {
+			console.log(error)
 		}
 		
 		props.navigation.navigate({

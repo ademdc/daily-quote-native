@@ -17,7 +17,7 @@ const quoteReducer = (state = innitialState, action) => {
 		case GET_FAVORITE_QUOTES:
 			return { ...state, favoriteQuotes: action.favoriteQuotes }
 		case SET_FAVORITE_QUOTE:
-			return { ...state, favoriteQuotes: [...state.favoriteQuotes, action.favoriteQuote] }
+			return { ...state, favoriteQuotes: [action.favoriteQuote, ...state.favoriteQuotes] }
 		default:
 			return state;
 	}
