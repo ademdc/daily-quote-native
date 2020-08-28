@@ -15,3 +15,22 @@ export const FEELINGS = [
   new Feeling('c5', 'Horny', '#368dff')
 
 ];
+
+export const RADIO_BUTTON_FEELING_PERIOD = [
+  {
+    label: 'Day',
+    value: 'day'
+   },
+   {
+    label: 'Week',
+    value: 'week'
+   },
+   {
+    label: 'Month',
+    value: 'month'
+   },
+   {
+    label: 'Year',
+    value: 'year'
+   }
+];

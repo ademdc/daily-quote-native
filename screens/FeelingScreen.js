@@ -23,6 +23,7 @@ const FeelingScreen = props => {
   const allFeelings = useSelector(state => state.feeling.allFeelings)
   const partner = useSelector(state => state.auth.partner)
   const loading = useSelector(state => state.feeling.loading)
+  
 
   let latestFeeling = null;
   let partnerFeeling = null;
@@ -32,7 +33,14 @@ const FeelingScreen = props => {
       routeName: 'FeelingDetail',
     });
   }
-  
+
+  const getFeelingButtonText = () => {
+    let nicknames = ['Shatzi', 'Ljubi', 'Masnice', 'Dragana'];
+    const random = Math.floor(Math.random() * nicknames.length);
+
+    return `${nicknames[random]}, how do you feel now?`
+  }
+
   if(loading){
     return <LoadingScreen />
   }
@@ -62,7 +70,7 @@ const FeelingScreen = props => {
         <TouchableOpacity  
           style={{padding: 20}} 
           onPress={goToFeelingDetail}>
-          <Text style={styles.feelingText}> How do you feel now? </Text>
+          <Text style={styles.feelingText}> {getFeelingButtonText()} </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -71,12 +79,12 @@ const FeelingScreen = props => {
 
 FeelingScreen.navigationOptions = navData => {
   return {
-    headerTitle: 'Feeling Of The Day',
+    headerTitle: 'Feeling Of The Moment',
     headerLeft: () => (
       <HeaderIcon icon='ios-refresh' onPress={()=> showMessage({message: "Refreshed latest feelings", type: "info"})}/>
     ),
     headerRight: () => (
-      <HeaderIcon icon='ios-calendar' onPress={()=>navData.navigation.navigate({ routeName: 'FeelingDetail' })}/>
+      <HeaderIcon icon='ios-calendar' onPress={()=>navData.navigation.navigate({ routeName: 'PeriodFeeling' })}/>
     )
    }
 };
