@@ -7,7 +7,7 @@ import {
 
 import { useSelector } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
-import { RADIO_BUTTON_FEELING_PERIOD } from '../data/data';
+import { RADIO_BUTTON_FEELING_PERIOD, RADIO_BUTTON_PERSON } from '../data/data';
 
 import RadioGroup from 'react-native-radio-buttons-group';
 import LoadingScreen from '../components/LoadingScreen';
@@ -16,20 +16,25 @@ import FeelingContainer from '../components/FeelingContainer';
 import URLs from '../contants/urls';
 import axios from 'axios';
 
+import * as Animatable from 'react-native-animatable';
 
 const PeriodFeelingScreen = props => {
   const token = useSelector(state => state.auth.token)
   const userId = useSelector(state => state.auth.userId)
+  const partner = useSelector(state => state.auth.partner)
+
   const [period, setPeriod] = useState('day');
   const [feeling, setFeeling] = useState(null);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [currentPersonId, setCurrentPersonId] = useState(userId);
 
-  const periodHandler = (period) => {
+  const periodHandler = (period, personId) => {
     setLoading(true)
-
+    
     let selectedButton = period.find(e => e.selected == true);
-    axios.get(URLs.base.concat(`/feelings/for_period?user_id=${userId}&period=${selectedButton.value}`), {
+
+    axios.get(URLs.base.concat(`/feelings/for_period?user_id=${personId}&period=${selectedButton.value}`), {
 			headers: {
 				Authorization: 'Bearer ' + token
 			}})
@@ -46,8 +51,21 @@ const PeriodFeelingScreen = props => {
       });
   }
 
+  const personHandler = (person) => {
+    let selectedPerson = person.find(e => e.selected == true);
+    let currentPerson = selectedPerson.value == 'me' ? userId : partner.id
+    
+    setCurrentPersonId(currentPerson)
+
+    periodHandler([{value: period, selected: true }], currentPerson)
+  }
+
+  const name = () => {
+    return currentPersonId == userId ? 'You were' : `${partner.first_name} was`
+  }
+
   useEffect(() => {
-    periodHandler([{value: 'day', selected: true }])
+    periodHandler([{value: period, selected: true }], userId)
   }, []);
 
   if(loading){
@@ -59,18 +77,25 @@ const PeriodFeelingScreen = props => {
       <View style={styles.radioButtons}>
         <RadioGroup 
           flexDirection='row' 
+          radioButtons={RADIO_BUTTON_PERSON} 
+          onPress={(e) => personHandler(e)} 
+        />
+      </View>
+      <View style={styles.radioButtons}>
+        <RadioGroup 
+          flexDirection='row' 
           radioButtons={RADIO_BUTTON_FEELING_PERIOD} 
-          onPress={(e) => periodHandler(e)} 
+          onPress={(e) => periodHandler(e, currentPersonId)} 
         />
       </View>
         <FeelingContainer 
+          animation="zoomInUp"
           userFeeling={null} 
           feeling={feeling} 
           text={`Feeling of the ${period}`}
           userId={userId}
         />
-
-        <Text>You were {feeling.name} {count} times in the last {period}</Text>
+        <Animatable.Text animation="zoomInUp" style={styles.buttonText} >{name()} {feeling.name} {count} times in the last {period}</Animatable.Text>
 		</View>
   );
 };
@@ -105,10 +130,10 @@ const styles = StyleSheet.create({
   quoteAuthor: {
 
   },
-  quoteText: {
+  buttonText: {
     textAlign: 'center',
     fontFamily: 'ibm-plex-thin',
-    fontSize: 30,
+    fontSize: 20,
     paddingVertical: 20,
     paddingHorizontal: 10
   },

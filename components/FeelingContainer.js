@@ -13,11 +13,15 @@ import { showMessage } from "react-native-flash-message";
 import URLs from '../contants/urls';
 import axios from 'axios';
 
+import * as Animatable from 'react-native-animatable';
+
 
 const FeelingContainer = (props) => {
   const token = useSelector(state => state.auth.token)
 
   const getFeelingTime = (feeling) => {
+    if (!feeling) return 
+
     var date = new Date(feeling.created_at).toString().split('GMT')[0]
     showMessage({
       message: date,
@@ -56,12 +60,12 @@ const FeelingContainer = (props) => {
       <View style={{...styles.textContainer, borderLeftColor: props.feeling.color }}>
         <Text style={styles.feelingText}> {props.text}</Text>
         <TouchableOpacity onPress={() => getFeelingDetails(props.feeling)}>
-          <Text style={styles.feeling}>{(props.feeling || {}).name.toUpperCase()}</Text>
+          <Animatable.Text style={styles.feeling}>{(props.feeling || {}).name.toUpperCase()}</Animatable.Text>
         </TouchableOpacity>
       </View>
       <View style={styles.feelingImageContainer}>
       <TouchableOpacity onPress={() => getFeelingTime(props.userFeeling)}>
-        <Image style={styles.feelingImage} source={{uri: props.feeling.image}}></Image>
+        <Animatable.Image animation="pulse" easing="ease-out" iterationCount={15} style={styles.feelingImage} source={{uri: props.feeling.image}}></Animatable.Image>
       </TouchableOpacity>
       </View>
     </View>

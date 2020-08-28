@@ -34,3 +34,14 @@ export const RADIO_BUTTON_FEELING_PERIOD = [
     value: 'year'
    }
 ];
+
+export const RADIO_BUTTON_PERSON = [
+  {
+    label: 'Me',
+    value: 'me'
+   },
+   {
+    label: 'Partner',
+    value: 'partner'
+   }
+];
