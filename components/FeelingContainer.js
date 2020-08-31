@@ -30,13 +30,15 @@ const FeelingContainer = (props) => {
   } 
 
   const getFeelingDetails = (feeling) => {
+    if (!feeling || !props.userFeeling) return 
+    
     axios.get(URLs.base.concat(`/feelings/user_feeling?user_id=${props.userFeeling.user_id}&feeling_id=${feeling.id}`), {
 			headers: {
 				Authorization: 'Bearer ' + token
 			}})
 			.then(feelingResponse => {
         showMessage({
-          message: `There are ${(feelingResponse.data || []).length} ${feeling.name} feelings in the last month for that user.`,
+          message: `There are ${(feelingResponse.data || []).length} ${feeling.name} feelings in the last week for that user.`,
           type: "info",
         })
 			})
@@ -44,8 +46,13 @@ const FeelingContainer = (props) => {
 				console.log(error)
 		});
   }
+  
+  const toUpper = (text) => {
+    if (!text) return ''
 
-  if(!props.feeling && !props.userFeeling) {
+    return text.toUpperCase()
+  }
+  if(!props.feeling) {
     return(
       <View style={styles.feelingContainer}>
         <View style={{...styles.textContainer }}>
@@ -60,13 +67,13 @@ const FeelingContainer = (props) => {
       <View style={{...styles.textContainer, borderLeftColor: props.feeling.color }}>
         <Text style={styles.feelingText}> {props.text}</Text>
         <TouchableOpacity onPress={() => getFeelingDetails(props.feeling)}>
-          <Animatable.Text style={styles.feeling}>{(props.feeling || {}).name.toUpperCase()}</Animatable.Text>
+          <Animatable.Text style={styles.feeling}>{toUpper((props.feeling || {}).name)}</Animatable.Text>
         </TouchableOpacity>
       </View>
       <View style={styles.feelingImageContainer}>
-      <TouchableOpacity onPress={() => getFeelingTime(props.userFeeling)}>
-        <Animatable.Image animation="pulse" easing="ease-out" iterationCount={15} style={styles.feelingImage} source={{uri: props.feeling.image}}></Animatable.Image>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => getFeelingTime(props.userFeeling)}>
+          <Animatable.Image animation="pulse" easing="ease-out" iterationCount={20} style={styles.feelingImage} source={{uri: props.feeling.image}}></Animatable.Image>
+        </TouchableOpacity>
       </View>
     </View>
 	);
@@ -76,7 +83,7 @@ const styles = StyleSheet.create({
   feelingContainer: {
     padding: 20,
     flex: 1,
-    width: '100%',
+    width: 370,
     height: 300,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -84,10 +91,14 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   textContainer: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 10,
+    marginRight: 8,
     flexDirection: 'column',
     alignItems: 'baseline',
     justifyContent: 'flex-start',
-    borderLeftWidth: 5,
+    borderLeftWidth: 7,
     paddingLeft: 10
   },
   feelingImageContainer: {
@@ -104,7 +115,8 @@ const styles = StyleSheet.create({
     fontFamily: 'ibm-plex-light'
   },
   feeling: {
-    fontSize: 50,
+    fontSize: 35,
+    fontWeight: 'bold',
     fontStyle: 'normal',
     fontFamily: 'ibm-plex-light'
   }

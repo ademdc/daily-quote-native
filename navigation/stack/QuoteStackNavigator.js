@@ -3,7 +3,7 @@ import { defaultStackNavOptions } from './constants';
 import QuoteScreen from '../../screens/QuoteScreen';
 
 const QuoteStackNavigator = createStackNavigator({
-  QuoteScreen: QuoteScreen,
+    QuoteScreen: QuoteScreen,
   },{
     defaultNavigationOptions: defaultStackNavOptions
   });

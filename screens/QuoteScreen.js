@@ -2,8 +2,9 @@ import React, { useState, useEffect, Fragment, useRef, useCallback } from "react
 import Constants from 'expo-constants';
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import LoadingScreen from '../components/LoadingScreen';
+import MasnicaImageBackground from '../components/MasnicaImageBackground';
 
-import { StyleSheet, View, Text, Button, TouchableOpacity, ScrollView, ActivityIndicator, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import { Notifications } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +15,8 @@ import * as authActions from '../store/actions/auth';
 import * as Permissions from 'expo-permissions';
 
 const isInFavorites = (allQuotes, quote) => {
-  return allQuotes.map(q => q.text).includes(quote.text)
+  if (!allQuotes) return false
+  return allQuotes.map(q => q.text).includes((quote || {}).text)
 }
 
 const QuoteScreen = (props) => {
@@ -43,7 +45,6 @@ const QuoteScreen = (props) => {
       }
       if (token){
         let newPushToken = await Notifications.getExpoPushTokenAsync();
-        console.log(newPushToken);
         await dispatch(authActions.setPushToken(newPushToken))
       }
     } else {
@@ -64,6 +65,8 @@ const QuoteScreen = (props) => {
   }, []);
 
   const setFavoriteQuoteHandler = () => {
+    if(!token) return;
+
     if(isInFavorites(favoriteQuotes, quote)){
       showMessage({
         message: "Quote is already in favorites",
@@ -82,6 +85,14 @@ const QuoteScreen = (props) => {
     }
     
   }
+
+  // useEffect(() => {
+  //   props.navigation.setParams({ 
+  //     setAsFavorite: setFavoriteQuoteHandler,
+  //     favorites: favoriteQuotes,
+  //     quote: quote
+  //   });
+  // }, [setFavoriteQuoteHandler]);
   
 	if (!quote) {
 		return (
@@ -90,13 +101,13 @@ const QuoteScreen = (props) => {
 	} 
 
   return (
-    <View style={styles.container}>
-      <ImageBackground imageStyle= {{opacity:0.4}} style={styles.imageBg} source={{uri: quote.image_url}}>
+    <View style={styles.container} key={Math.random()}>
+      <MasnicaImageBackground opacity={0.4}>
         <ScrollView horizontal={false} contentContainerStyle={styles.quoteContainer}>
           <Fragment>
             <Text style={styles.quoteText}>{quote.text}</Text>
             <Text style={styles.quoteAuthor}>{quote.author}</Text> 
-          </Fragment>          
+          </Fragment>
           {token && (<TouchableOpacity style={styles.likeQuoteContainer} onPress={setFavoriteQuoteHandler}>
             { isInFavorites(favoriteQuotes, quote) ? 
               (<Ionicons name='ios-heart' size={50} color='white'/>) : 
@@ -105,17 +116,24 @@ const QuoteScreen = (props) => {
           </TouchableOpacity>)}
           
         </ScrollView>
-      </ImageBackground>
+      </MasnicaImageBackground>
     </View>
   )
 }
 
 QuoteScreen.navigationOptions = navData => {
+  // let favs  = navData.navigation.getParam('favorites');
+  // let quote = navData.navigation.getParam('quote');
+  // let icon  = isInFavorites(favs,  quote) ? 'ios-heart' : 'ios-heart-empty';
+
   return {
     headerTitle: 'Mašnica Daily Quote',
     headerLeft: () => (
-      <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
+      <HeaderIcon icon='ios-menu' onPress={() => navData.navigation.toggleDrawer()}/>
     )
+    // headerRight: () => (
+    //   <HeaderIcon icon={icon} onPress={() => navData.navigation.state.params.setAsFavorite() }/>
+    // )
    }
 };
 const styles = StyleSheet.create({

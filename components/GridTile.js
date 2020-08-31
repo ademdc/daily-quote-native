@@ -3,14 +3,16 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Colors from '../contants/colors';
 import { showMessage } from "react-native-flash-message";
 import * as feelingActions from '../store/actions/feeling';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const GridTile = props => {
 	const dispatch = useDispatch();
+	const userId = useSelector(state => state.auth.userId)
 
 	const feelingHandler = (feeling_id) => {
 		try {
 			dispatch(feelingActions.setNewLatestFeeling(feeling_id))
+			dispatch(feelingActions.getLatestFeelings(userId))
       showMessage({
         message: "You changed your mood",
         type: "success",

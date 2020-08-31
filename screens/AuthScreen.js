@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
 
 import * as authActions from '../store/actions/auth';
+import * as quoteActions from '../store/actions/quote';
+import * as feelingActions from '../store/actions/feeling';
 
 const AuthScreen = (props) => {
 	const [email, setEmail] = useState('');
@@ -19,10 +21,8 @@ const AuthScreen = (props) => {
 	const authHandler = () => {
 		let action;
     if (isSignup) {
-			console.log('is signup')
       action = authActions.signUp(email, password)
     } else {
-			console.log('is signin')
       action = authActions.login(email, password)
 		}
 		
@@ -31,22 +31,24 @@ const AuthScreen = (props) => {
 
 		dispatch(action)
 			.then(response => {
+				console.log(response)
 				setIsLoading(false);
+				dispatch(authActions.setPartner());
+      	dispatch(quoteActions.getFavoriteQuotes());
+      	// dispatch(feelingActions.getLatestFeelings(3));
+      	dispatch(feelingActions.getAllFeelings());
 				showMessage({
 					message: "Successfully logged in",
 					type: "success",
 				})
 				props.navigation.navigate('HomeScreen')
 			}).catch(error => {
-				console.log('IN CATCH OF DISPATCH auth actions')
 				setError(error.message);
 				setIsLoading(false);
 			})
-		
 	}
 
 	useEffect(() => {
-		console.log('in use effect of error change')
     if (error) {
       showMessage({
 				message: error,

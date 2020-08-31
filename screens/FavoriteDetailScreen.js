@@ -8,14 +8,11 @@ import {
 } from 'react-native';
 
 import { useDispatch } from 'react-redux';
+import Separator from '../components/Separator';
 
 const FavoriteDetailScreen = props => {
   const dispatch = useDispatch();
   const quote = props.navigation.getParam('quote')
-
-  useEffect(() => {
-    
-  }, [dispatch]);
 
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
@@ -35,6 +32,13 @@ const FavoriteDetailScreen = props => {
           
           <View style={styles.quoteTextContainer}>
             <Text style={styles.quoteText}>{quote.text}</Text>
+          </View>
+
+          <Separator quote={quote}/>
+          
+          <View style={{...styles.quoteTextContainer, paddingVertical: 20}}>
+            <Text>Daily for date: </Text>
+            <Text style={styles.quoteDate}>{quote.daily_for_date}</Text>
           </View>
         
       </View>
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
   },
   quoteImageContainer: {
     width: '100%',
-    height: 200
+    height: 300
   },
   quoteImage: {
     width: '100%',
@@ -81,6 +85,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingVertical: 20,
     paddingHorizontal: 10
+  },
+  quoteDate: {
+    textAlign: 'center',
+    fontFamily: 'ibm-plex-thin',
+    fontSize: 15
   },
   masnicaLogoContainer: {
     height: 100,

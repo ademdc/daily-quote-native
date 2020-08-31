@@ -15,6 +15,8 @@ import { showMessage } from "react-native-flash-message";
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import FeelingContainer from '../components/FeelingContainer';
 import LoadingScreen from '../components/LoadingScreen';
+import MasnicaImageBackground from '../components/MasnicaImageBackground';
+
 
 const FeelingScreen = props => {
   const userId = useSelector(state => state.auth.userId)
@@ -45,35 +47,40 @@ const FeelingScreen = props => {
     return <LoadingScreen />
   }
 
-  if(latestUserFeeling && partnerUserFeeling) {
+  if(latestUserFeeling) {
     latestFeeling  = allFeelings.find(feeling => feeling.id == latestUserFeeling.feeling_id)
+  }
+
+  if(partnerUserFeeling) {
     partnerFeeling = allFeelings.find(feeling => feeling.id == partnerUserFeeling.feeling_id)
   }
 
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'white'}} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>    
-      <View style={styles.screen}>
+    <View style={styles.container}>
+      <MasnicaImageBackground opacity={0.2} >
+        <ScrollView horizontal={false} contentContainerStyle={styles.quoteContainer}>
+          <FeelingContainer 
+            userFeeling={latestUserFeeling} 
+            feeling={latestFeeling} 
+            text='You are feeling'
+            userId={userId}
+          />
 
-        <FeelingContainer 
-          userFeeling={latestUserFeeling} 
-          feeling={latestFeeling} 
-          text='You are feeling'
-          userId={userId}
-        />
-        <FeelingContainer 
-          userFeeling={partnerUserFeeling} 
-          feeling={partnerFeeling} 
-          text={`${partner.first_name} is feeling`}
-          userId={partner.id}
-        />
-          
-        <TouchableOpacity  
-          style={{padding: 20}} 
-          onPress={goToFeelingDetail}>
-          <Text style={styles.feelingText}> {getFeelingButtonText()} </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <FeelingContainer 
+            userFeeling={partnerUserFeeling} 
+            feeling={partnerFeeling} 
+            text={`${partner.first_name} is feeling`}
+            userId={partner.id}
+          />
+            
+          <TouchableOpacity  
+            style={{ padding: 20 }} 
+            onPress={goToFeelingDetail}>
+            <Text style={styles.feelingText}> {getFeelingButtonText()} </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </MasnicaImageBackground>
+    </View>
   );
 };
 
@@ -89,11 +96,25 @@ FeelingScreen.navigationOptions = navData => {
    }
 };
 const styles = StyleSheet.create({
-  screen: {
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    height: '100%'
+  },
+  quoteContainer: {
+    
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white'
+    height: '100%',
+    width: '100%'
+  },
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   feelingContainer: {
     padding: 20,
@@ -104,6 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%'
+
   },
   feelingText: {
     fontSize: 15,

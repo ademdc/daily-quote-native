@@ -47,6 +47,7 @@ export const getAllFeelings = () => {
 
 export const getLatestFeelings = (user_id) => {
 	return (dispatch, getState) => {
+    dispatch(setLoading(true));
 		axios.get(URLs.base.concat(`/feelings/latest_feelings?user_id=${user_id}`), {
 			headers: {
 				Authorization: 'Bearer ' + getState().auth.token
@@ -56,26 +57,24 @@ export const getLatestFeelings = (user_id) => {
 			})
 			.catch(error => {
 				console.log(error)
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
       });
 	}
 }
 
 export const setNewLatestFeeling = (feeling_id) => {
 	return (dispatch, getState) => {
-    dispatch(setLoading(true));
 		axios.post(URLs.base.concat(`/feelings/create_user_feeling?feeling_id=${feeling_id}`), {}, {
 			headers: {
 				Authorization: 'Bearer ' + getState().auth.token
 			}})
 			.then(feeling => {
         dispatch({ type: SET_NEW_LATEST_FEELING, latestFeeling: feeling.data });
-        getLatestFeelings(getState().auth.userId)
 			})
 			.catch(error => {
 				console.log(error)
-      })
-      .finally(() => {
-        dispatch(setLoading(false));
       });
 	}
 }
