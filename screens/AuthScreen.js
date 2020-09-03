@@ -35,7 +35,7 @@ const AuthScreen = (props) => {
 				setIsLoading(false);
 				dispatch(authActions.setPartner());
       	dispatch(quoteActions.getFavoriteQuotes());
-      	// dispatch(feelingActions.getLatestFeelings(3));
+      	dispatch(feelingActions.getLatestFeelings(null));
       	dispatch(feelingActions.getAllFeelings());
 				showMessage({
 					message: "Successfully logged in",

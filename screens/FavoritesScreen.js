@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList, ImageBackground, TextInput } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
+import { setFilters, filterByText } from '../helpers/quoteHelper';
+import { showMessage } from "react-native-flash-message";
+
 import * as quoteActions from '../store/actions/quote';
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import Colors from '../contants/colors';
+import Category from "../components/Category";
+import Categories from '../contants/categories';
+import { ScrollView } from "react-native-gesture-handler";
 
 const favoriteQuote = (item, props) => {
 	return(
@@ -28,6 +34,9 @@ const favoriteQuote = (item, props) => {
 const FavoritesScreen = (props) => {
 	let token = useSelector(state => state.auth.token)
 	let favoriteQuotes = useSelector(state => state.quote.favoriteQuotes)
+	let [filteredQuotes, setFilteredQuotes] = useState(favoriteQuotes)
+	let [filterVisibile, setFilterVisible] = useState(false)
+	let [filteredText, setFilteredText] = useState('')
 
 	const dispatch = useDispatch();
 
@@ -37,6 +46,29 @@ const FavoritesScreen = (props) => {
 		}
 	}, [token])
 
+	useEffect(() => {
+		setFilteredQuotes(favoriteQuotes)
+	}, [favoriteQuotes])
+
+	const setFiltersHandler = (categoryFilter) => {
+		setFilteredText('')
+    const filtered = setFilters(favoriteQuotes, categoryFilter)
+    if(filtered.length === 0) {
+      showMessage({
+				message: 'No filtered quotes with that category',
+				type: "info",
+			})
+		}
+    setFilteredQuotes(filtered)
+	}
+	
+	const showFilter = () => {}
+
+	useEffect(() => {
+		filteredQuotes = filterByText(favoriteQuotes, filteredText)
+		setFilteredQuotes(filteredQuotes)
+	}, [filteredText])
+
 	if (!token) {
 		return (
 			<View style={styles.centered}>
@@ -45,16 +77,33 @@ const FavoritesScreen = (props) => {
 			</View>
 		)
 	}
+
 	return (
 		<View style={styles.centered}>
-			{favoriteQuotes.length > 0 ? (
+			<View style={styles.categoryContainer}>
+				<ScrollView horizontal  contentContainerStyle={styles.centerScroll}>
+					{ Object.keys(Categories).map(category => <Category key={category} quotes={favoriteQuotes} categoryText={category} onPressHandler={setFiltersHandler} /> )}
+				</ScrollView>
+			</View>
+
+			<TextInput 
+				value={filteredText} 
+				style={styles.filterInput} 
+				onChangeText={text => setFilteredText(text)} 
+				placeholder='Filter by text'
+				autoCapitalize='none'	
+			/>
+			
+			{ filteredQuotes.length > 0 ? (
 				<FlatList 
 					keyExtractor={item => item.id.toString()}
-					data={favoriteQuotes}
+					data={filteredQuotes}
 					renderItem={(item) => favoriteQuote(item, props)}
 					contentContainerStyle={styles.list}
 				/>) : (
-					<Text style={styles.title}>No favorite quotes added yet.</Text>
+				<View style={styles.centered}>
+					<Text style={styles.title}>No quotes Here.</Text>
+				</View>
 			)}
 		</View>
 	);
@@ -72,8 +121,13 @@ FavoritesScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
 	centered: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start'
+	},
+	centerScroll: {
+		justifyContent: 'center', 
+		alignItems: 'center',
+		flexGrow: 1
 	},
 	listContainer: {
 		height: 400,
@@ -81,6 +135,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 20,
 		marginVertical: 40,
+		textAlign: 'center',
 		fontFamily: 'ibm-plex-light'
 	},
 	favoriteQuoteContainer: {
@@ -106,7 +161,6 @@ const styles = StyleSheet.create({
 		width:100,
 		fontFamily: 'ibm-plex-thin',
 		fontSize: 20
-		// backgroundColor: 'white'
 	},
 	quoteTextContainer: {
 		backgroundColor: 'rgba(255,255,255,0.7)'
@@ -118,10 +172,23 @@ const styles = StyleSheet.create({
 		padding: 5
 	},
 	list: {
-		// width: '100%'
 		flexGrow: 1
-		// alignItems: 'center',
-		// justifyContent: 'center'
+	},
+	categoryContainer: {
+		height: 80,
+		width: '100%',
+		flexDirection: 'row',
+		backgroundColor: Colors.babyRose
+	},
+	filterInput: {
+		fontFamily: 'ibm-plex-light',
+		height: 40,
+		width: '100%',
+		borderColor: Colors.babyRose,
+		borderRadius: 10,
+		fontSize: 15,
+		margin: 10,
+		textAlign: 'center'
 	}
 })
 

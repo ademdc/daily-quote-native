@@ -1,23 +1,19 @@
 
 import React from 'react';
 import Colors from '../contants/colors';
+import Categories from '../contants/categories';
 
 import {
   View,
   StyleSheet
 } from 'react-native';
 
-const CATEGORY_COLORS = {
-	'Love': Colors.lightRed,
-	'Traveling': Colors.blueLight,
-	'Motivational': Colors.lightGreen,
-	'Religion': Colors.darkGreen
-}
+
 
 const Separator = (props) => {
 
   const getBorderColor = () => {
-    return CATEGORY_COLORS[props.quote.category]
+    return Categories[props.quote.category]
   }
 
   return (

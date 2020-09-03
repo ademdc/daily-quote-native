@@ -72,7 +72,7 @@ const FeelingContainer = (props) => {
       </View>
       <View style={styles.feelingImageContainer}>
         <TouchableOpacity onPress={() => getFeelingTime(props.userFeeling)}>
-          <Animatable.Image animation="pulse" easing="ease-out" iterationCount={20} style={styles.feelingImage} source={{uri: props.feeling.image}}></Animatable.Image>
+          <Animatable.Image animation="pulse" easing="ease-out" iterationCount={100} style={styles.feelingImage} source={{uri: props.feeling.image}}></Animatable.Image>
         </TouchableOpacity>
       </View>
     </View>

@@ -32,7 +32,7 @@ const MainTabNavigator = createBottomTabNavigator({
 		navigationOptions: {
 			tabBarLabel: 'Feelings',
 			tabBarIcon: (tabInfo) => {
-				return (<Ionicons name='ios-body' size={25} color={tabInfo.tintColor} />);
+				return (<Ionicons name='md-happy' size={25} color={tabInfo.tintColor} />);
 			}
 		}
 	}
