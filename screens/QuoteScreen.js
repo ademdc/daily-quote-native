@@ -61,8 +61,6 @@ const QuoteScreen = (props) => {
 		dispatch(quoteActions.getRandomQuote());
   }, [quote])
 
-
-
   useEffect(() => {
     randomQuoteHandler()
   }, []);

@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, View, Text, Button, TouchableOpacity, FlatList, ImageBackground, TextInput } from "react-native";
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilters, filterByText } from '../helpers/quoteHelper';
 import { showMessage } from "react-native-flash-message";
+import { ScrollView } from "react-native-gesture-handler";
 
 import * as quoteActions from '../store/actions/quote';
 import HeaderIcon from '../navigation/components/HeaderIcon';
 import Colors from '../contants/colors';
 import Category from "../components/Category";
 import Categories from '../contants/categories';
-import { ScrollView } from "react-native-gesture-handler";
+
+import * as Animatable from 'react-native-animatable';
 
 const favoriteQuote = (item, props) => {
+	const borderColor = Categories[item.item.category]
 	return(
-		<View style={styles.favoriteQuoteContainer}>
+		<View style={{...styles.favoriteQuoteContainer, borderBottomColor: borderColor}}>
 		<TouchableOpacity onPress={()=> props.navigation.navigate({
 			routeName: 'FavoriteDetailScreen',
 			params: {
@@ -62,12 +65,21 @@ const FavoritesScreen = (props) => {
     setFilteredQuotes(filtered)
 	}
 	
-	const showFilter = () => {}
-
 	useEffect(() => {
 		filteredQuotes = filterByText(favoriteQuotes, filteredText)
 		setFilteredQuotes(filteredQuotes)
 	}, [filteredText])
+
+	const toggleFilter = useCallback(async () => {
+		setFilteredText('')
+		setFilterVisible(!filterVisibile)
+	}, [filterVisibile]);
+
+	useEffect(() =>{ 
+		props.navigation.setParams({ 
+			toggleFilter: toggleFilter
+		});
+	}, [toggleFilter])
 
 	if (!token) {
 		return (
@@ -85,15 +97,20 @@ const FavoritesScreen = (props) => {
 					{ Object.keys(Categories).map(category => <Category key={category} quotes={favoriteQuotes} categoryText={category} onPressHandler={setFiltersHandler} /> )}
 				</ScrollView>
 			</View>
-
-			<TextInput 
-				value={filteredText} 
-				style={styles.filterInput} 
-				onChangeText={text => setFilteredText(text)} 
-				placeholder='Filter by text'
-				autoCapitalize='none'	
-			/>
 			
+			{ filterVisibile > 0 ? (
+					<TextInput 
+						animation="fadeInUp"
+						value={filteredText} 
+						style={styles.filterInput} 
+						onChangeText={text => setFilteredText(text)} 
+						placeholder='Filter by text'
+						autoCapitalize='none'	
+					/>
+				) : (<View></View>)
+			}
+			
+		
 			{ filteredQuotes.length > 0 ? (
 				<FlatList 
 					keyExtractor={item => item.id.toString()}
@@ -102,7 +119,7 @@ const FavoritesScreen = (props) => {
 					contentContainerStyle={styles.list}
 				/>) : (
 				<View style={styles.centered}>
-					<Text style={styles.title}>No quotes Here.</Text>
+					<Text style={styles.title}>No quotes here</Text>
 				</View>
 			)}
 		</View>
@@ -113,7 +130,10 @@ FavoritesScreen.navigationOptions = navData => {
   return {
     headerTitle: 'Favorites',
     headerLeft: () => (
-      <HeaderIcon icon='ios-menu' onPress={()=>navData.navigation.toggleDrawer()}/>
+      <HeaderIcon icon='ios-menu' onPress={()=> navData.navigation.toggleDrawer()} />
+		),
+		headerRight: () => (
+      <HeaderIcon icon='md-color-filter' onPress={()=> navData.navigation.state.params.toggleFilter()} />
     )
    }
 };
@@ -121,8 +141,8 @@ FavoritesScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
 	centered: {
 		flex: 1,
-		justifyContent: 'flex-start',
-		alignItems: 'flex-start'
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	centerScroll: {
 		justifyContent: 'center', 
@@ -144,7 +164,7 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		width: '100%',
 		borderBottomColor: Colors.babyRose,
-		borderBottomWidth: 3,
+		borderBottomWidth: 5,
 	},
 	favQuoteImageContainer: {
 		height: 100,
@@ -178,7 +198,12 @@ const styles = StyleSheet.create({
 		height: 80,
 		width: '100%',
 		flexDirection: 'row',
-		backgroundColor: Colors.babyRose
+		backgroundColor: Colors.babyRose,
+		shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 1,
 	},
 	filterInput: {
 		fontFamily: 'ibm-plex-light',

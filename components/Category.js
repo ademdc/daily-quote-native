@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 
 import Categories from '../contants/categories';
+import Colors from '../contants/colors';
+
 import { filterByCategory } from '../helpers/quoteHelper';
 
 const Category = (props) => {
@@ -33,12 +35,17 @@ const style = StyleSheet.create({
   },
   category: {
     height: '60%',
-    width: 200,
-    margin: 10,
+    width: 140,
+    margin: 5,
     borderRadius: 30,
     backgroundColor: 'red',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 1,
   },
   text: {
     fontFamily: 'ibm-plex-light',

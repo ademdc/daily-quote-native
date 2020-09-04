@@ -125,7 +125,6 @@ const PeriodFeelingScreen = props => {
 
 
       <FeelingContainer 
-        animation="zoomInUp"
         userFeeling={null} 
         feeling={feeling} 
         text={`Feeling of the ${period}`}
