@@ -30,19 +30,21 @@ const GridTile = props => {
 	}
 
 	return(
-		<TouchableOpacity  
-			style={{...styles.renderItem, backgroundColor: props.itemData.item.color}} 
-			onPress={() => feelingHandler(props.itemData.item.id)}>
-			<View>
-				<Text style={styles.itemText}> {props.itemData.item.name} </Text>
-			</View>
-		</TouchableOpacity>
+		<View style={{...styles.renderItem, backgroundColor: props.itemData.item.color}} >
+			<TouchableOpacity  
+				onPress={() => feelingHandler(props.itemData.item.id)}>
+				<View>
+					<Text style={styles.itemText}> {props.itemData.item.name} </Text>
+				</View>
+			</TouchableOpacity>
+		</View>
+		
 	);
 }
 const styles = StyleSheet.create({
 	renderItem: {
 		flexGrow: 1,
-		width: '40%',
+		width: '43%',
 		height: 100,
 		backgroundColor: Colors.blueLight,
 		padding: 10,
@@ -52,8 +54,8 @@ const styles = StyleSheet.create({
 		shadowColor: 'black',
 		shadowOpacity: 0.26,
 		elevation: 3,
-		alignItems: 'flex-end',
-		justifyContent: 'flex-end',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	itemText: {
 		color: 'white',
